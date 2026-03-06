@@ -5,30 +5,19 @@
 <title>Stage 1 — The Crime Scene</title>
 <link rel="stylesheet" href="theme.css">
 <style>
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(139,26,26,.06),transparent 60%);pointer-events:none;z-index:0;}
-.string{position:fixed;height:1px;background:linear-gradient(90deg,transparent,rgba(139,26,26,.25),transparent);z-index:0;animation:sw var(--d) ease-in-out infinite var(--dl);}
-@keyframes sw{0%,100%{transform:rotate(var(--r));opacity:.4}50%{transform:rotate(calc(var(--r) + 1deg));opacity:.8}}
+.redacted{background:#2c2c2c;color:transparent;padding:0 3px;cursor:pointer;transition:all .3s;border-radius:2px;}
+.redacted.on{background:#8b1a1a;color:#faf6f0;}
 .evidence-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:24px 0;}
-.ev-card{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);padding:16px;transition:all .3s;cursor:default;}
-.ev-card:hover{background:rgba(201,168,76,.07);border-color:var(--gold);transform:translateY(-2px);}
-.ev-num{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--gold);display:block;margin-bottom:6px;}
+.ev-card{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);padding:16px;}
+.ev-num{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:#c9a84c;display:block;margin-bottom:6px;}
 .ev-card p{font-size:12px;color:rgba(250,246,240,.65);line-height:1.6;}
-.redacted{background:var(--char);color:transparent;padding:0 3px;cursor:pointer;transition:all .3s;border-radius:2px;}
-.redacted:hover,.redacted.on{background:var(--red);color:var(--cream);}
 </style>
 </head>
 <body>
-<div class="string" style="top:12%;width:65%;left:8%;--r:-2deg;--d:6s;--dl:0s;"></div>
-<div class="string" style="top:40%;width:45%;left:35%;--r:1.5deg;--d:7s;--dl:-3s;"></div>
-<div class="string" style="top:72%;width:75%;left:5%;--r:-.8deg;--d:5s;--dl:-1.5s;"></div>
-
 <div class="stage-wrap">
-  <div class="tape">⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠</div>
-
+  <div class="tape">⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠ DO NOT CROSS ⚠</div>
   <div class="progress-dots" id="dots"></div>
-
   <div class="stamp">CASE FILE — GR10-ICSE-001</div>
-
   <div class="stage-bar">
     <div class="stage-num">01</div>
     <div class="stage-meta">
@@ -36,113 +25,83 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="stage-title">The <em>Crime Scene</em></div>
     </div>
   </div>
-
-  <p class="scene-intro">
-    Someone hid a guide — a survival manual for Grade 10 ICSE — and scattered its secrets across ten locations in this school.
-    You've been chosen to find it. The trail begins here, in the corridor outside Room 10, where it all starts.
-  </p>
-
+  <p class="scene-intro">Someone hid a guide — a survival manual for Grade 10 ICSE — and scattered its secrets across ten locations in this school. You've been chosen to find it.</p>
   <div class="pinned-note">
-    <strong>EVIDENCE FILE A</strong> — Found taped to locker 10, third floor:
-    <br><br>
-    If you're reading this, you already passed the first test: you showed up.
-    The guide was compiled by a student who cracked the code of Grade 10 ICSE.
-    It's hidden at the end of a trail of ten clues — one for each year you've survived to get here.
-    <br><br>
-    The first clue is earned. Nothing good is handed over without proof you deserve it.
-    Prove you know your <span class="redacted" id="redactedSpan">SUSPECTS</span> — 
-    your subjects — and the first codeword is yours.
-    <br><br>
+    <strong>EVIDENCE FILE A</strong> — Found taped to locker 10, third floor:<br><br>
+    If you're reading this, you already passed the first test: you showed up.<br><br>
+    Prove you know your <span class="redacted" id="redactedSpan">SUSPECTS</span> — your subjects — and the first codeword is yours.
     <span class="sig">— T.S. (A Survivor)</span>
   </div>
-  <p style="font-family:'Courier Prime',monospace;font-size:9px;color:var(--gray);margin-bottom:24px;">* click the black bars to reveal hidden text *</p>
-
-  <div class="evidence-grid">
-    <div class="ev-card"><span class="ev-num">EXHIBIT A — LOCATION</span><p>Room 10. Third floor. The locker smells like old textbooks and ambition.</p></div>
-    <div class="ev-card"><span class="ev-num">EXHIBIT B — WITNESS</span><p>"She always knew which chapters would appear. Said she had <em>a method</em>."</p></div>
-    <div class="ev-card"><span class="ev-num">EXHIBIT C — PHYSICAL</span><p>A dog-eared Chemistry textbook. One page underlined seven times: <em>Periodic Table.</em></p></div>
-  </div>
-
+  <p style="font-family:'Courier Prime',monospace;font-size:9px;color:#6b6560;margin-bottom:24px;">* click the black bar to reveal hidden text *</p>
   <hr class="div">
-
   <div class="puzzle-box" data-label="INTERROGATION ROOM — STAGE 1">
     <p class="score-lbl" id="sc">CLUES GATHERED: 0 / 5</p>
     <div class="prog-wrap"><div class="prog-fill" id="pf" style="width:0%"></div></div>
     <div id="qbox"></div>
     <p class="feedback" id="fb"></p>
   </div>
-
   <div class="unlock-section" id="unlock">
-    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 1 COMPLETE — FIRST CODEWORD OBTAINED ✦</div>
-    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
-      You know your suspects. The trail moves to the room where all stories are born.
-    </p>
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:#c9a84c;margin-bottom:16px;">✦ STAGE 1 COMPLETE — FIRST CODEWORD OBTAINED ✦</div>
     <div class="clue-card">
       <span class="clue-lbl">🔑 CODEWORD #1 — WRITE THIS DOWN</span>
-      The first word belongs to those who truly seize the day.<br>
-      It is the first word of the Latin phrase that runs through this entire mystery.<br><br>
+      The first word of the Latin phrase that runs through this entire mystery.<br><br>
       <div class="clue-code">CARPE</div>
     </div>
     <a href="stage2.html" class="next-btn">→ Follow the Trail</a>
     <p class="next-note">NEXT STAGE: THE LIBRARY ARCHIVES</p>
   </div>
 </div>
-
 <script>
-// Progress dots
-const d=document.getElementById('dots');
-for(let i=0;i<10;i++){const el=document.createElement('div');el.className='dot'+(i===0?' active':'');d.appendChild(el);}
-
-const Qs=[
-  {q:"Which ICSE subject rewards you with partial 'method marks' even if your final answer is wrong?",
-   opts:["History","English Literature","Mathematics","Geography"],cor:2,
-   fb:"Correct! In ICSE Maths, showing your working always matters. A wrong answer with a right method still earns marks."},
-  {q:"The ICSE Biology examination is notorious for asking students to label diagrams. What is the golden rule?",
-   opts:["Labels are optional","Draw and label every diagram at least 5 times before the exam","Only label the parts you remember","Diagrams carry zero marks"],cor:1,
-   fb:"Muscle memory is real. Draw every diagram until your hand knows it without your brain's help."},
-  {q:"A student has 6 hours to revise 4 subjects before exams. Distributing time equally, how long per subject?",
-   opts:["1 hour","1.5 hours","2 hours","45 minutes"],cor:1,
-   fb:"1.5 hours each. Time management is your first detective tool — and your most important one."},
-  {q:"In Dead Poets Society, Mr. Keating famously says 'O Captain, My Captain' and teaches his students one Latin phrase. Which is it?",
-   opts:["Veni Vidi Vici","Carpe Diem","In Medias Res","Memento Mori"],cor:1,
-   fb:"Carpe Diem — seize the day. This phrase runs through every stage of this mystery. Remember it."},
-  {q:"For ICSE History 8-mark answers, what is the correct structure a detective-student should follow?",
-   opts:["Write everything you know, as fast as possible","Point → Explanation → Evidence (dates/names) → Link back to question","Introduction only, then list facts","Bullet points only, no explanation"],cor:1,
-   fb:"Precisely. Structure is everything — in detective work and in board exams. Link every answer back to the question."},
+var dotsEl = document.getElementById('dots');
+for (var i = 0; i < 10; i++) {
+  var dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dotsEl.appendChild(dot);
+}
+var Qs = [
+  { q: "Which ICSE subject gives partial 'method marks' even if your final answer is wrong?", opts: ["History", "English Literature", "Mathematics", "Geography"], cor: 2, fb: "Correct! In ICSE Maths, showing your working always matters." },
+  { q: "What is the golden rule for ICSE Biology diagram questions?", opts: ["Labels are optional", "Draw and label every diagram at least 5 times before the exam", "Only label parts you remember", "Diagrams carry zero marks"], cor: 1, fb: "Muscle memory is real. Draw every diagram until your hand knows it without your brain." },
+  { q: "A student has 6 hours to revise 4 subjects equally. How long per subject?", opts: ["1 hour", "1.5 hours", "2 hours", "45 minutes"], cor: 1, fb: "1.5 hours each. Time management is your most important detective tool." },
+  { q: "In Dead Poets Society, Mr. Keating teaches one famous Latin phrase. Which is it?", opts: ["Veni Vidi Vici", "Carpe Diem", "In Medias Res", "Memento Mori"], cor: 1, fb: "Carpe Diem — seize the day. This phrase runs through every stage of this mystery." },
+  { q: "For ICSE History 8-mark answers, what is the correct structure?", opts: ["Write everything you know fast", "Point → Explanation → Evidence → Link back to question", "Introduction only then list facts", "Bullet points only"], cor: 1, fb: "Structure is everything — in detective work and in board exams." }
 ];
-
-let cur=0,score=0,done=[];
-function render(){
-  const q=Qs[cur];
-  document.getElementById('qbox').innerHTML=`
-    <div class="quiz-q"><span class="qn">Q${cur+1}.</span> ${q.q}</div>
-    <div class="options">${q.opts.map((o,i)=>`<button class="opt" data-i="${i}">${String.fromCharCode(65+i)}.  ${o}</button>`).join('')}</div>`;
-  document.getElementById('fb').textContent='';
-  document.querySelectorAll('.opt').forEach(b=>{
-    b.addEventListener('click',()=>ans(parseInt(b.dataset.i)));
-  });
+var cur = 0, score = 0, done = [];
+function render() {
+  var q = Qs[cur];
+  var html = '<div class="quiz-q"><span class="qn">Q' + (cur+1) + '.</span> ' + q.q + '</div><div class="options">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="opt" data-i="' + i + '">' + String.fromCharCode(65+i) + '.  ' + q.opts[i] + '</button>';
+  }
+  html += '</div>';
+  document.getElementById('qbox').innerHTML = html;
+  document.getElementById('fb').textContent = '';
+  var btns = document.querySelectorAll('.opt');
+  for (var j = 0; j < btns.length; j++) {
+    (function(b) { b.addEventListener('click', function() { ans(parseInt(b.getAttribute('data-i'))); }); })(btns[j]);
+  }
 }
-function ans(i){
-  if(done[cur])return; done[cur]=1;
-  const q=Qs[cur];
-  document.querySelectorAll('.opt').forEach((b,j)=>{
-    b.classList.add(j===q.cor?'correct':j===i&&i!==q.cor?'wrong':'');
-    b.disabled=true;
-  });
-  if(i===q.cor)score++;
-  document.getElementById('fb').textContent=q.fb;
-  document.getElementById('sc').textContent=`CLUES GATHERED: ${score} / 5`;
-  document.getElementById('pf').style.width=`${((cur+1)/5)*100}%`;
-  setTimeout(()=>{cur++;cur<5?render():finish();},2400);
+function ans(i) {
+  if (done[cur]) return;
+  done[cur] = 1;
+  var q = Qs[cur];
+  var btns = document.querySelectorAll('.opt');
+  for (var j = 0; j < btns.length; j++) {
+    if (j === q.cor) btns[j].classList.add('correct');
+    else if (j === i) btns[j].classList.add('wrong');
+    btns[j].disabled = true;
+  }
+  if (i === q.cor) score++;
+  document.getElementById('fb').textContent = q.fb;
+  document.getElementById('sc').textContent = 'CLUES GATHERED: ' + score + ' / 5';
+  document.getElementById('pf').style.width = (((cur+1)/5)*100) + '%';
+  setTimeout(function() { cur++; if (cur < 5) render(); else finish(); }, 2400);
 }
-function finish(){
-  document.getElementById('qbox').innerHTML=`<div class="quiz-q" style="text-align:center;font-style:italic;">
-    <span class="qn">CASE CLOSED.</span><br><br>You gathered ${score} of 5 clues.<br>
-    ${score>=3?'The trail is open, Detective.':'Even with gaps in knowledge, the path opens for those who try.'}</div>`;
-  document.getElementById('fb').textContent='';
+function finish() {
+  document.getElementById('qbox').innerHTML = '<div class="quiz-q" style="text-align:center;font-style:italic;"><span class="qn">CASE CLOSED.</span><br><br>You gathered ' + score + ' of 5 clues.<br>' + (score >= 3 ? 'The trail is open, Detective.' : 'The path opens for those who try.') + '</div>';
+  document.getElementById('fb').textContent = '';
   document.getElementById('unlock').classList.add('show');
 }
-document.getElementById('redactedSpan').addEventListener('click',function(){this.classList.toggle('on');});
+document.getElementById('redactedSpan').addEventListener('click', function() { this.classList.toggle('on'); });
 render();
 </script>
 </body>
