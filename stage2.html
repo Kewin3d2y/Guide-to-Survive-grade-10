@@ -81,7 +81,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:50vh;backgroun
     <div class="puzzle-title">Match Cause to Effect</div>
     <p class="puzzle-desc">Select one item from the left column and one from the right, then press MATCH. Find all 4 correct pairs.</p>
     <div class="pair-grid" id="pg"></div>
-    <button class="match-btn" id="mb" id="doMatchBtn" disabled>MATCH SELECTED PAIR</button>
+    <button class="match-btn" id="mb" disabled>MATCH SELECTED PAIR</button>
     <div class="mfb" id="mfb"></div>
   </div>
 
@@ -164,7 +164,7 @@ function doMatch(){
 }
 buildPairs();
 document.getElementById("checkCBtn").addEventListener("click",checkC);
-document.getElementById("doMatchBtn").addEventListener("click",doMatch);
+document.getElementById("mb").addEventListener("click",doMatch);
 </script>
 </body>
 </html>
