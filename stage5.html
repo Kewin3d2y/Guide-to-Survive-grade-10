@@ -124,16 +124,18 @@ function answer(qi,oi){
   if(attempted.has(qi))return;
   attempted.add(qi);
   const q=Qs[qi];
-  document.querySelectorAll(`[data-qi="${qi}"]`).forEach((b,j)=>{
-    b.classList.add(j===q.cor?'correct':j===oi&&oi!==q.cor?'wrong':'');
+  const allBtns=document.querySelectorAll('.ropt[data-qi="'+qi+'"]');
+  allBtns.forEach(function(b,j){
+    if(j===q.cor) b.classList.add('correct');
+    else if(j===oi&&oi!==q.cor) b.classList.add('wrong');
     b.disabled=true;
   });
   if(oi===q.cor)solved++;
-  document.getElementById('sc').textContent=`RIDDLES SOLVED: ${solved} / 4`;
-  document.getElementById('pf').style.width=`${(attempted.size/4)*100}%`;
+  document.getElementById('sc').textContent='RIDDLES SOLVED: '+solved+' / 4';
+  document.getElementById('pf').style.width=((attempted.size/4)*100)+'%';
   document.getElementById('fb').className='feedback'+(oi===q.cor?' good':'');
   document.getElementById('fb').textContent=q.fb;
-  if(attempted.size===4)setTimeout(()=>document.getElementById('unlock').classList.add('show'),1500);
+  if(attempted.size===4)setTimeout(function(){document.getElementById('unlock').classList.add('show');},1500);
 }
 build();
 </script>
