@@ -107,10 +107,10 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     <p style="font-family:'Courier Prime',monospace;font-size:10px;color:rgba(250,246,240,.5);margin-bottom:14px;">In Sequence B, what colour comes after Blue in the visible light spectrum (ROYGBIV)?</p>
     
     <div class="color-choices" id="choices">
-      <div class="cc" style="background:#4cc9f0;" title="Cyan" onclick="pick(this,'CYAN')"></div>
-      <div class="cc" style="background:#7b2d8b;" title="Indigo" onclick="pick(this,'INDIGO')"></div>
-      <div class="cc" style="background:#ee82ee;" title="Violet" onclick="pick(this,'VIOLET')"></div>
-      <div class="cc" style="background:#1d3461;" title="Navy Blue" onclick="pick(this,'NAVY')"></div>
+      <div class="cc" style="background:#4cc9f0;" title="Cyan" data-col="CYAN"></div>
+      <div class="cc" style="background:#7b2d8b;" title="Indigo" data-col="INDIGO"></div>
+      <div class="cc" style="background:#ee82ee;" title="Violet" data-col="VIOLET"></div>
+      <div class="cc" style="background:#1d3461;" title="Navy Blue" data-col="NAVY"></div>
     </div>
     <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'Courier Prime',monospace;font-size:9px;color:rgba(250,246,240,.4);margin-bottom:16px;">
       <span style="color:#4cc9f0;">■ Cyan</span>
@@ -121,7 +121,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
     <div class="answer-wrap">
       <input class="ans-input" id="ai" placeholder="TYPE THE COLOUR NAME…" maxlength="12">
-      <button class="check-btn" onclick="chk()">CONFIRM</button>
+      <button class="check-btn" id="chkBtn4">CONFIRM</button>
     </div>
     <div class="feedback" id="fb"></div>
   </div>
@@ -175,6 +175,10 @@ function chk(){
   }
 }
 document.getElementById('ai').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
+document.getElementById('chkBtn4').addEventListener('click',chk);
+document.querySelectorAll('.cc').forEach(el=>{
+  el.addEventListener('click',()=>pick(el, el.dataset.col));
+});
 </script>
 </body>
 </html>

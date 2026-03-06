@@ -77,12 +77,12 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
     <div class="answer-wrap">
       <input class="ans-input" id="ai" placeholder="WHAT WORD DO THEY SPELL?" maxlength="12">
-      <button class="check-btn" onclick="chk()">ANALYSE</button>
+      <button class="check-btn" id="chkBtn3">ANALYSE</button>
     </div>
     <div class="feedback" id="fb"></div>
 
     <br>
-    <button class="hint-btn" onclick="showHint()">REQUEST HINT FROM LAB ASSISTANT</button>
+    <button class="hint-btn" id="hintBtn3">REQUEST HINT FROM LAB ASSISTANT</button>
     <div id="hint" style="display:none;font-family:'Courier Prime',monospace;font-size:10px;color:var(--gray);margin-top:10px;line-height:1.8;">
       I · A · N · A · N · E · S = The first letters = I-A-N-A-N-E-S... try rearranging: it spells INANEES? No — read them in order: I, A, N, A, N, E, S. What 7-letter word uses exactly those letters in that order? INANEES → rethink: Fe=Iron(I), Ar(A), Ne(N), Ar(A), N(N), Es(E), S(S) → I-A-N-A-N-E-S → INANEES? Actually the answer is simpler: just take Fe→Iron, so the word is built from initials in order. Answer: it spells the subject you're studying right now. Try: SCIENCE.
     </div>
@@ -120,6 +120,8 @@ function chk(){
     fb.textContent='✗  Not yet. Take the FIRST LETTER of each element\'s full name in order: Iron(I), Argon(A), Neon(N), Argon(A), Nitrogen(N), Einsteinium(E), Sulfur(S) = INANEES → SCIENCE.';
   }
 }
+document.getElementById('chkBtn3').addEventListener('click',chk);
+document.getElementById('hintBtn3').addEventListener('click',showHint);
 document.getElementById('ai').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
 function showHint(){document.getElementById('hint').style.display='block';}
 </script>

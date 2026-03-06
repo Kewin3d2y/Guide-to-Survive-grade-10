@@ -124,8 +124,9 @@ function buildSky(){
     const node=document.createElement('div');
     node.className='star-node';
     node.style.left=`${s.lx}%`; node.style.top=`${s.ly}%`;
-    node.innerHTML=`<div class="s-dot" id="sd${s.id}" onclick="clickStar(${s.id})">${s.id}</div><div class="s-name">${s.label}</div>`;
+    node.innerHTML=`<div class="s-dot" id="sd${s.id}">${s.id}</div><div class="s-name">${s.label}</div>`;
     canvas.appendChild(node);
+    node.querySelector('.s-dot').addEventListener('click',()=>clickStar(s.id));
   });
 }
 
@@ -182,8 +183,11 @@ function buildQs(){
     const div=document.createElement('div'); div.className='q-card';
     div.innerHTML=`<span class="q-num">STAR QUESTION ${qi+1}</span>
       <div class="q-text">${q.q}</div>
-      <div class="q-opts">${q.opts.map((o,oi)=>`<button class="qo" onclick="ansQ(${qi},${oi})">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}</div>`;
+      <div class="q-opts">${q.opts.map((o,oi)=>`<button class="qo" data-qi="${qi}" data-oi="${oi}">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}</div>`;
     cont.appendChild(div);
+    div.querySelectorAll('.qo').forEach(b=>{
+      b.addEventListener('click',()=>ansQ(parseInt(b.dataset.qi),parseInt(b.dataset.oi)));
+    });
   });
 }
 function ansQ(qi,oi){

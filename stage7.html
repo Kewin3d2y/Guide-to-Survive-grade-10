@@ -68,9 +68,9 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       </div>
     </div>
 
-    <button class="check-cw" onclick="checkCW()">CHECK CROSSWORD</button>
+    <button class="check-cw" id="checkCWBtn">CHECK CROSSWORD</button>
     <div class="feedback" id="fb"></div>
-    <div class="hint-reveal" onclick="showHints()">▸ REVEAL ANSWER HINTS (click if stuck)</div>
+    <div class="hint-reveal" id="showHintsBtn">▸ REVEAL ANSWER HINTS (click if stuck)</div>
     <div id="hints" style="display:none;font-family:'Courier Prime',monospace;font-size:10px;color:var(--gray);margin-top:12px;line-height:2;">
       1A: CARPE &nbsp;|&nbsp; 3A: MASS &nbsp;|&nbsp; 5A: BIOLOGY &nbsp;|&nbsp; 6A: PHOTOSYNTHESIS<br>
       1D: SLEEP &nbsp;|&nbsp; 2D: ORGANIC &nbsp;|&nbsp; 4D: SLOPE
@@ -277,6 +277,8 @@ function checkCW(){
 function showHints(){document.getElementById('hints').style.display='block';}
 
 renderGrid();
+document.getElementById("checkCWBtn").addEventListener("click",checkCW);
+document.getElementById("showHintsBtn").addEventListener("click",showHints);
 </script>
 </body>
 </html>

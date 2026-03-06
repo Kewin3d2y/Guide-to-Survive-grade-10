@@ -50,7 +50,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
     It's hidden at the end of a trail of ten clues — one for each year you've survived to get here.
     <br><br>
     The first clue is earned. Nothing good is handed over without proof you deserve it.
-    Prove you know your <span class="redacted" onclick="this.classList.toggle('on')">SUSPECTS</span> — 
+    Prove you know your <span class="redacted" id="redactedSpan">SUSPECTS</span> — 
     your subjects — and the first codeword is yours.
     <br><br>
     <span class="sig">— T.S. (A Survivor)</span>
@@ -116,8 +116,11 @@ function render(){
   const q=Qs[cur];
   document.getElementById('qbox').innerHTML=`
     <div class="quiz-q"><span class="qn">Q${cur+1}.</span> ${q.q}</div>
-    <div class="options">${q.opts.map((o,i)=>`<button class="opt" onclick="ans(${i})">${String.fromCharCode(65+i)}.  ${o}</button>`).join('')}</div>`;
+    <div class="options">${q.opts.map((o,i)=>`<button class="opt" data-i="${i}">${String.fromCharCode(65+i)}.  ${o}</button>`).join('')}</div>`;
   document.getElementById('fb').textContent='';
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.addEventListener('click',()=>ans(parseInt(b.dataset.i)));
+  });
 }
 function ans(i){
   if(done[cur])return; done[cur]=1;
@@ -139,6 +142,7 @@ function finish(){
   document.getElementById('fb').textContent='';
   document.getElementById('unlock').classList.add('show');
 }
+document.getElementById('redactedSpan').addEventListener('click',function(){this.classList.toggle('on');});
 render();
 </script>
 </body>

@@ -94,7 +94,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
     <div class="answer-wrap" style="margin-top:20px;">
       <input class="ans-input" id="ai" placeholder="DECODED WORD…" maxlength="10">
-      <button class="check-btn" onclick="chk()">TRANSMIT</button>
+      <button class="check-btn" id="chkBtn8">TRANSMIT</button>
     </div>
     <div class="feedback" id="fb"></div>
 
@@ -108,8 +108,8 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <button class="bkey" id="dashBtn" onmousedown="tap('-')" onmouseup="unlit('dashBtn')" ontouchstart="tap('-')" ontouchend="unlit('dashBtn')">— DASH</button>
     </div>
     <div class="btools">
-      <button class="btool" onclick="addSpace()">SPACE (next letter)</button>
-      <button class="btool" onclick="clearMorse()">CLEAR</button>
+      <button class="btool" id="addSpaceBtn">SPACE (next letter)</button>
+      <button class="btool" id="clearBtn">CLEAR</button>
     </div>
     <div class="beeper-output" id="bOut">···</div>
     <div class="beeper-decoded" id="bDec"></div>
@@ -159,6 +159,9 @@ function chk(){
     fb.textContent='✗  Check the chart: ·- = A, ·-· = R, ·- = A, ·-· = R, -·- = K. Read the letters in order.';
   }
 }
+document.getElementById('chkBtn8').addEventListener('click',chk);
+document.getElementById('addSpaceBtn').addEventListener('click',addSpace);
+document.getElementById('clearBtn').addEventListener('click',clearMorse);
 document.getElementById('ai').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
 
 // Tapper

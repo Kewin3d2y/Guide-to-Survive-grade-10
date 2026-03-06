@@ -130,7 +130,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
     <div class="words-grid" id="wordsGrid"></div>
 
-    <button class="unlock-btn" onclick="tryUnlock()"><span>⚿  OPEN THE GATE</span></button>
+    <button class="unlock-btn" id="tryUnlockBtn"><span>⚿  OPEN THE GATE</span></button>
     <div class="gate-fb" id="gateFb"></div>
   </div>
 
@@ -263,6 +263,7 @@ function launchConfetti(){
 }
 
 // Enter key moves to next input
+document.getElementById('tryUnlockBtn').addEventListener('click',tryUnlock);
 document.querySelectorAll('.word-slot input').forEach((inp,i,all)=>{
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&all[i+1])all[i+1].focus();if(e.key==='Enter'&&i===all.length-1)tryUnlock();});
   inp.addEventListener('input',function(){this.value=this.value.replace(/[^a-zA-Z]/g,'');});

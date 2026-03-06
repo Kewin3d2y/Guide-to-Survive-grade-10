@@ -70,7 +70,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:50vh;backgroun
     <p style="font-family:'Courier Prime',monospace;font-size:10px;color:var(--gray);margin-bottom:14px;">Decode "JXLGH" — what word does it spell? Enter it below.</p>
     <div class="answer-wrap">
       <input class="ans-input" id="ci" placeholder="TYPE THE DECODED WORD…" maxlength="12">
-      <button class="check-btn" onclick="checkC()">DECODE</button>
+      <button class="check-btn" id="checkCBtn">DECODE</button>
     </div>
     <div class="feedback" id="cfb"></div>
   </div>
@@ -81,7 +81,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:50vh;backgroun
     <div class="puzzle-title">Match Cause to Effect</div>
     <p class="puzzle-desc">Select one item from the left column and one from the right, then press MATCH. Find all 4 correct pairs.</p>
     <div class="pair-grid" id="pg"></div>
-    <button class="match-btn" id="mb" onclick="doMatch()" disabled>MATCH SELECTED PAIR</button>
+    <button class="match-btn" id="mb" id="doMatchBtn" disabled>MATCH SELECTED PAIR</button>
     <div class="mfb" id="mfb"></div>
   </div>
 
@@ -133,7 +133,7 @@ function buildPairs(){
     const el=document.createElement('div');
     el.className='pair-item'; el.textContent=item.t;
     el.dataset.side=item.side; el.dataset.idx=item.idx;
-    el.onclick=()=>pick(el,item.side);
+    el.addEventListener('click',()=>pick(el,item.side));
     pg.appendChild(el);
   });
 }
@@ -163,6 +163,8 @@ function doMatch(){
   document.getElementById('mb').disabled=true;
 }
 buildPairs();
+document.getElementById("checkCBtn").addEventListener("click",checkC);
+document.getElementById("doMatchBtn").addEventListener("click",doMatch);
 </script>
 </body>
 </html>

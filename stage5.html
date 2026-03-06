@@ -112,8 +112,11 @@ function build(){
     div.className='riddle-card';
     div.innerHTML=`<span class="riddle-n">RIDDLE ${qi+1}</span>
       <div class="riddle-text">${q.q}</div>
-      <div class="riddle-opts">${q.opts.map((o,oi)=>`<button class="ropt" data-qi="${qi}" data-oi="${oi}" onclick="answer(${qi},${oi})">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}</div>`;
+      <div class="riddle-opts">${q.opts.map((o,oi)=>`<button class="ropt" data-qi="${qi}" data-oi="${oi}">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}</div>`;
     cont.appendChild(div);
+    div.querySelectorAll('.ropt').forEach(b=>{
+      b.addEventListener('click',()=>answer(parseInt(b.dataset.qi),parseInt(b.dataset.oi)));
+    });
   });
 }
 
