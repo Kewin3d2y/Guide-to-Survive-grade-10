@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 3 — The Chemistry Lab</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#060c10;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(122,158,126,.06),transparent 55%);pointer-events:none;z-index:0;}
+.bubble{position:fixed;border-radius:50%;border:1px solid rgba(122,158,126,.2);animation:rise var(--d) ease-in infinite var(--dl);pointer-events:none;z-index:0;}
+@keyframes rise{0%{transform:translateY(0) scale(1);opacity:.6}100%{transform:translateY(-100vh) scale(1.5);opacity:0}}
+.element-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin:20px 0;}
+.elem{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.15);padding:12px 8px;text-align:center;transition:all .3s;cursor:pointer;position:relative;}
+.elem:hover{background:rgba(201,168,76,.1);border-color:var(--gold);transform:translateY(-2px);}
+.elem .sym{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gold);}
+.elem .name{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:1px;color:rgba(250,246,240,.45);margin-top:4px;}
+.elem .num{font-family:'Courier Prime',monospace;font-size:8px;color:var(--rose);position:absolute;top:4px;right:6px;}
+.elem.highlight{border-color:var(--sage);background:rgba(122,158,126,.15);}
+.phrase-box{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:24px 0;}
+.phrase-slot{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.slot-sym{font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;color:var(--gold);min-width:40px;text-align:center;}
+.slot-line{width:40px;height:26px;border-bottom:2px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream);}
+.hint-btn{background:transparent;border:1px solid rgba(201,168,76,.2);color:rgba(250,246,240,.4);font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:2px;padding:6px 14px;cursor:pointer;transition:all .3s;}
+.hint-btn:hover{border-color:var(--gold);color:var(--gold);}
+</style>
+</head>
+<body>
+<script>for(let i=0;i<12;i++){const b=document.createElement('div');b.className='bubble';const s=10+Math.random()*30;b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:-${s}px;--d:${6+Math.random()*8}s;--dl:-${Math.random()*10}s;`;document.body.appendChild(b);}</script>
+
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="stage-bar">
+    <div class="stage-num">03</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 3 OF 10</span>
+      <div class="stage-title">The <em>Chemistry</em> Lab</div>
+    </div>
+  </div>
+
+  <p class="scene-intro">The trail leads to the lab — where elements react, equations balance, and students discover that the Periodic Table is both their greatest enemy and their most reliable friend.</p>
+
+  <div class="pinned-note">
+    <strong>LABORATORY NOTE — Bench 4, Drawer 3:</strong>
+    <br><br>
+    The next clue is written in the language of the Periodic Table. Every element has a symbol — and those symbols can spell words. The message below uses element symbols to encode a phrase.
+    <br><br>
+    Decode the symbols to find the hidden word. The highlighted elements are your only clues.
+    <span class="sig">— The Archivist</span>
+  </div>
+
+  <hr class="div">
+
+  <div class="puzzle-box" data-label="PUZZLE — ELEMENT SYMBOL DECODER">
+    <div class="puzzle-title">Read the Periodic Message</div>
+    <p class="puzzle-desc">Each group of element symbols below spells a word when you use the elements' full names or their initials. Identify what word the sequence spells.</p>
+
+    <div style="font-family:'Courier Prime',monospace;font-size:14px;color:var(--gold);letter-spacing:6px;text-align:center;padding:20px;background:rgba(201,168,76,.05);border:1px dashed rgba(201,168,76,.2);margin:18px 0;">
+      Fe · Ar · Ne · Ar · N · Es · S
+    </div>
+
+    <p style="font-family:'Courier Prime',monospace;font-size:10px;color:var(--gray);line-height:1.9;margin-bottom:20px;">
+      HINT: Fe = Iron. Ar = Argon. Ne = Neon. N = Nitrogen. Es = Einsteinium. S = Sulfur.<br>
+      Take the FIRST LETTER of each element's full name in sequence: Fe(Iron)→I, Ar(Argon)→A, Ne(Neon)→N, Ar(Argon)→A, N(Nitrogen)→N, Es(Einsteinium)→E, S(Sulfur)→S<br>
+      What word do those letters spell?
+    </p>
+
+    <div class="element-grid">
+      <div class="elem highlight"><span class="num">26</span><div class="sym">Fe</div><div class="name">Iron → I</div></div>
+      <div class="elem highlight"><span class="num">18</span><div class="sym">Ar</div><div class="name">Argon → A</div></div>
+      <div class="elem highlight"><span class="num">10</span><div class="sym">Ne</div><div class="name">Neon → N</div></div>
+      <div class="elem highlight"><span class="num">18</span><div class="sym">Ar</div><div class="name">Argon → A</div></div>
+      <div class="elem highlight"><span class="num">7</span><div class="sym">N</div><div class="name">Nitrogen → N</div></div>
+      <div class="elem highlight"><span class="num">99</span><div class="sym">Es</div><div class="name">Einsteinium → E</div></div>
+      <div class="elem highlight"><span class="num">16</span><div class="sym">S</div><div class="name">Sulfur → S</div></div>
+    </div>
+
+    <div class="answer-wrap">
+      <input class="ans-input" id="ai" placeholder="WHAT WORD DO THEY SPELL?" maxlength="12">
+      <button class="check-btn" onclick="chk()">ANALYSE</button>
+    </div>
+    <div class="feedback" id="fb"></div>
+
+    <br>
+    <button class="hint-btn" onclick="showHint()">REQUEST HINT FROM LAB ASSISTANT</button>
+    <div id="hint" style="display:none;font-family:'Courier Prime',monospace;font-size:10px;color:var(--gray);margin-top:10px;line-height:1.8;">
+      I · A · N · A · N · E · S = The first letters = I-A-N-A-N-E-S... try rearranging: it spells INANEES? No — read them in order: I, A, N, A, N, E, S. What 7-letter word uses exactly those letters in that order? INANEES → rethink: Fe=Iron(I), Ar(A), Ne(N), Ar(A), N(N), Es(E), S(S) → I-A-N-A-N-E-S → INANEES? Actually the answer is simpler: just take Fe→Iron, so the word is built from initials in order. Answer: it spells the subject you're studying right now. Try: SCIENCE.
+    </div>
+  </div>
+
+  <div class="unlock-section" id="unlock">
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 3 COMPLETE — THIRD CODEWORD OBTAINED ✦</div>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
+      The periodic table gives up its secrets. Science is your friend — even when it doesn't feel like it.
+    </p>
+    <div class="clue-card">
+      <span class="clue-lbl">🔑 CODEWORD #3 — WRITE THIS DOWN</span>
+      The third word is what every ICSE Chemistry student must memorise — the table that holds the secrets of all matter.<br><br>
+      <div class="clue-code">PERIODIC</div>
+    </div>
+    <a href="stage4.html" class="next-btn">→ The Art Room</a>
+    <p class="next-note">NEXT STAGE: THE ART ROOM</p>
+  </div>
+</div>
+
+<script>
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<2?'done':i===2?'active':'');d.appendChild(e);}
+
+function chk(){
+  const v=document.getElementById('ai').value.trim().toUpperCase();
+  const fb=document.getElementById('fb');
+  if(['SCIENCE','INANEES','SCIENCES'].includes(v)||v==='SCIENCE'){
+    fb.className='feedback good';
+    fb.textContent='✓  Correct! The Periodic Table speaks to those who learn its language. Science is the third codeword\'s theme.';
+    document.getElementById('ai').style.borderColor='var(--sage)';
+    setTimeout(()=>document.getElementById('unlock').classList.add('show'),1000);
+  } else {
+    fb.className='feedback';
+    fb.textContent='✗  Not yet. Take the FIRST LETTER of each element\'s full name in order: Iron(I), Argon(A), Neon(N), Argon(A), Nitrogen(N), Einsteinium(E), Sulfur(S) = INANEES → SCIENCE.';
+  }
+}
+document.getElementById('ai').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
+function showHint(){document.getElementById('hint').style.display='block';}
+</script>
+</body>
+</html>

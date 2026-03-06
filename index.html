@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Case of the Missing Grades — Grade 10 ICSE Mystery Hunt</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#050308;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(139,26,26,.08),transparent 50%),radial-gradient(ellipse at 70% 60%,rgba(122,158,126,.05),transparent 50%);pointer-events:none;z-index:0;}
+.star{position:fixed;background:white;border-radius:50%;animation:tw var(--d) ease-in-out infinite var(--dl);pointer-events:none;z-index:0;}
+@keyframes tw{0%,100%{opacity:.1}50%{opacity:.7}}
+.hero{text-align:center;padding:60px 0 40px;}
+.case-no{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:6px;color:var(--gold);margin-bottom:20px;display:block;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(32px,7vw,72px);font-weight:900;color:var(--cream);line-height:1.08;margin-bottom:16px;}
+.hero-title em{color:var(--gold);font-style:italic;}
+.hero-sub{font-size:16px;font-style:italic;color:rgba(250,246,240,.5);margin-bottom:40px;line-height:1.7;}
+.start-btn{display:inline-block;background:var(--red);color:var(--cream);font-family:'Courier Prime',monospace;font-weight:700;font-size:12px;letter-spacing:5px;padding:20px 60px;text-decoration:none;transition:all .4s;border:2px solid var(--red);position:relative;overflow:hidden;}
+.start-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-100%);transition:transform .4s;}
+.start-btn:hover::before{transform:translateX(0);}
+.start-btn span{position:relative;z-index:1;}
+.start-btn:hover span{color:var(--navy);}
+/* Stage map */
+.stage-map{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:40px 0;}
+.sm-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:16px;transition:all .3s;text-decoration:none;display:block;}
+.sm-card:hover{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.06);transform:translateY(-2px);}
+.sm-n{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--rose);display:block;margin-bottom:6px;}
+.sm-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--cream);margin-bottom:4px;}
+.sm-type{font-family:'Courier Prime',monospace;font-size:9px;color:rgba(250,246,240,.3);letter-spacing:1px;}
+/* Rules */
+.rules-box{background:rgba(26,26,46,.8);border:1px solid rgba(201,168,76,.15);padding:32px;margin:30px 0;position:relative;}
+.rules-box::before{content:'CASE BRIEFING';position:absolute;top:-1px;left:28px;font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:4px;background:var(--gold);color:var(--navy);padding:3px 12px;}
+.rule{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;}
+.rule-n{font-family:'Courier Prime',monospace;font-size:11px;color:var(--gold);flex-shrink:0;min-width:20px;font-weight:700;}
+.rule-t{font-size:14px;color:rgba(250,246,240,.75);line-height:1.6;}
+</style>
+</head>
+<body>
+<script>for(let i=0;i<100;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*1.8+.3;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--dl:-${Math.random()*6}s;`;document.body.appendChild(s);}</script>
+
+<div class="stage-wrap">
+  <div class="hero">
+    <span class="case-no">CASE FILE #GR10-ICSE-2025</span>
+    <div class="hero-title">The Case of<br>the <em>Missing Grades</em></div>
+    <p class="hero-sub">A ten-stage mystery hunt for the Grade 10 ICSE detective.<br>Solve the puzzles. Collect the clues. Unlock the guide.</p>
+    <a href="stage1.html" class="start-btn"><span>▶ &nbsp; BEGIN THE HUNT</span></a>
+  </div>
+
+  <hr class="div">
+
+  <div class="rules-box">
+    <div class="rule"><span class="rule-n">01</span><span class="rule-t">Follow the stages in order — each one leads to the next. Don't skip ahead.</span></div>
+    <div class="rule"><span class="rule-n">02</span><span class="rule-t">At the end of each stage, you'll receive a <strong style="color:var(--gold);">codeword</strong>. Write them all down — you'll need all 10 at the final gate.</span></div>
+    <div class="rule"><span class="rule-n">03</span><span class="rule-t">Use the hints if you get stuck. There's no shame in it. Even the best detectives ask for help.</span></div>
+    <div class="rule"><span class="rule-n">04</span><span class="rule-t">The tenth and final codeword is hidden in plain sight at Stage 10. Look carefully.</span></div>
+    <div class="rule"><span class="rule-n">05</span><span class="rule-t">When all 10 codewords are entered correctly, the guide unlocks. It was made for you. It's been waiting.</span></div>
+  </div>
+
+  <hr class="div">
+
+  <div style="font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:4px;color:var(--gray);margin-bottom:16px;">THE TEN LOCATIONS:</div>
+  <div class="stage-map">
+    <a href="stage1.html" class="sm-card"><span class="sm-n">STAGE 01</span><div class="sm-name">The Crime Scene</div><div class="sm-type">Quiz · 5 Questions</div></a>
+    <a href="stage2.html" class="sm-card"><span class="sm-n">STAGE 02</span><div class="sm-name">The Library</div><div class="sm-type">Cipher + Matching</div></a>
+    <a href="stage3.html" class="sm-card"><span class="sm-n">STAGE 03</span><div class="sm-name">Chemistry Lab</div><div class="sm-type">Element Decoder</div></a>
+    <a href="stage4.html" class="sm-card"><span class="sm-n">STAGE 04</span><div class="sm-name">The Art Room</div><div class="sm-type">Colour Pattern</div></a>
+    <a href="stage5.html" class="sm-card"><span class="sm-n">STAGE 05</span><div class="sm-name">The Music Room</div><div class="sm-type">Rhythm Riddles</div></a>
+    <a href="stage6.html" class="sm-card"><span class="sm-n">STAGE 06</span><div class="sm-name">The Rooftop</div><div class="sm-type">Star Map · Q&A</div></a>
+    <a href="stage7.html" class="sm-card"><span class="sm-n">STAGE 07</span><div class="sm-name">Old Classroom</div><div class="sm-type">Crossword</div></a>
+    <a href="stage8.html" class="sm-card"><span class="sm-n">STAGE 08</span><div class="sm-name">The Infirmary</div><div class="sm-type">Morse Code</div></a>
+    <a href="stage9.html" class="sm-card"><span class="sm-n">STAGE 09</span><div class="sm-name">Principal's Office</div><div class="sm-type">Logic Grid</div></a>
+    <a href="stage10.html" class="sm-card" style="border-color:rgba(201,168,76,.25);background:rgba(201,168,76,.04);"><span class="sm-n" style="color:var(--gold);">STAGE 10 ✦ FINAL</span><div class="sm-name" style="color:var(--gold);">The Secret Garden</div><div class="sm-type">All 10 Codewords · The Guide</div></a>
+  </div>
+
+  <div class="quote-box" style="margin-top:40px;">
+    "No matter what anybody tells you, words and ideas can change the world."<br>
+    <span style="font-size:11px;font-family:'Courier Prime',monospace;letter-spacing:2px;color:var(--gold);margin-top:8px;display:block;">— Dead Poets Society</span>
+  </div>
+
+  <div class="case-closed" style="font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:5px;color:rgba(250,246,240,.1);text-align:center;margin-top:40px;">
+    GRADE 10 ICSE · TEN STAGES · ONE GUIDE · CARPE DIEM
+  </div>
+</div>
+</body>
+</html>

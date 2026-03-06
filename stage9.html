@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 9 — The Principal's Office</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#060508;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(139,26,26,.07),transparent 55%);pointer-events:none;z-index:0;}
+.office-desk{background:rgba(20,15,10,.9);border:1px solid rgba(201,168,76,.2);padding:32px;margin:24px 0;position:relative;}
+.office-desk::before{content:'PRINCIPAL\'S OFFICE — AUTHORISED ACCESS ONLY';position:absolute;top:-1px;left:50%;transform:translateX(-50%);font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;background:var(--red);color:var(--cream);padding:3px 14px;white-space:nowrap;}
+/* Logic grid */
+.logic-grid{border-collapse:collapse;width:100%;margin:20px 0;font-family:'Courier Prime',monospace;font-size:12px;}
+.logic-grid th{background:var(--navy);color:var(--gold);padding:10px 14px;text-align:center;font-weight:700;letter-spacing:2px;border:1px solid rgba(201,168,76,.2);}
+.logic-grid td{padding:10px 14px;border:1px solid rgba(255,255,255,.07);color:rgba(250,246,240,.75);text-align:center;vertical-align:middle;}
+.logic-grid tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.cell-input{width:36px;height:36px;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);color:var(--cream);font-family:'Courier Prime',monospace;font-size:14px;text-align:center;outline:none;text-transform:uppercase;}
+.cell-input:focus{border-color:var(--gold);background:rgba(201,168,76,.08);}
+.cell-input.correct{background:rgba(122,158,126,.2);border-color:var(--sage);color:var(--sage);}
+.cell-input.wrong{background:rgba(139,26,26,.2);border-color:var(--red);color:var(--rose);}
+/* Clue cards */
+.clue-cards{display:flex;flex-direction:column;gap:10px;margin:20px 0;}
+.cc{background:rgba(26,26,46,.8);border-left:3px solid var(--gold);padding:12px 18px;}
+.cc .cn{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:2px;color:var(--gold);display:block;margin-bottom:5px;}
+.cc p{font-size:13px;color:rgba(250,246,240,.8);line-height:1.6;}
+/* Deduction buttons */
+.ded-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:16px 0;}
+.ded-cell{padding:10px 12px;border:1px solid rgba(255,255,255,.08);font-family:'Courier Prime',monospace;font-size:10px;color:rgba(250,246,240,.6);cursor:pointer;transition:all .22s;text-align:center;background:rgba(255,255,255,.03);}
+.ded-cell:hover{border-color:rgba(201,168,76,.3);color:var(--gold);}
+.ded-cell.yes{background:rgba(122,158,126,.2);border-color:var(--sage);color:var(--sage);}
+.ded-cell.no{background:rgba(139,26,26,.15);border-color:rgba(139,26,26,.3);color:rgba(196,131,122,.6);text-decoration:line-through;}
+</style>
+</head>
+<body>
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="stage-bar">
+    <div class="stage-num">09</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 9 OF 10</span>
+      <div class="stage-title">The Principal's <em>Office</em></div>
+    </div>
+  </div>
+
+  <p class="scene-intro">The final office — the most intimidating room in the school. But look closer. On the desk is a logic puzzle, left deliberately. The last codeword before the final stage is locked inside the deductions.</p>
+
+  <div class="pinned-note">
+    <strong>NOTE — On the Principal's desk blotter:</strong>
+    <br><br>
+    A detective doesn't guess. A detective deduces. The final codeword before the endgame requires you to use pure logic — 
+    no prior knowledge required. Read the clues. Eliminate the impossible. Whatever remains, however improbable, must be the truth.
+    <span class="sig">— The Archivist</span>
+  </div>
+
+  <hr class="div">
+
+  <div class="puzzle-box" data-label="LOGIC GRID PUZZLE — THE STUDY SCHEDULE">
+    <div class="puzzle-title">The Mystery Study Schedule</div>
+    <p class="puzzle-desc">Four students — Avery, Blake, Casey, Dev — each study a different subject (Maths, Physics, History, Biology) in different time slots (6AM, 3PM, 7PM, 10PM). Use the clues to match each student to their subject and time slot.</p>
+
+    <div class="clue-cards">
+      <div class="cc"><span class="cn">CLUE 1</span><p>The student who studies Biology does so at 7PM.</p></div>
+      <div class="cc"><span class="cn">CLUE 2</span><p>Avery does not study at 10PM, and Avery does not study Maths.</p></div>
+      <div class="cc"><span class="cn">CLUE 3</span><p>Blake studies exactly 4 hours before Dev. Both study in the evening.</p></div>
+      <div class="cc"><span class="cn">CLUE 4</span><p>Casey is the only student who studies in the morning (before noon).</p></div>
+      <div class="cc"><span class="cn">CLUE 5</span><p>The Physics student studies at 10PM. Dev is not the Physics student.</p></div>
+      <div class="cc"><span class="cn">CLUE 6</span><p>Blake studies History.</p></div>
+    </div>
+
+    <hr class="div">
+
+    <p style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:2px;color:var(--gray);margin-bottom:14px;">CLICK CELLS TO TOGGLE: blank → ✓ (yes) → ✗ (no) → blank</p>
+
+    <table class="logic-grid">
+      <tr>
+        <th>STUDENT</th><th>SUBJECT</th><th>TIME</th>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream);">Avery</strong></td>
+        <td><select class="cell-input" id="avS" style="width:90px;"><option value="">?</option><option>Maths</option><option>Physics</option><option>History</option><option>Biology</option></select></td>
+        <td><select class="cell-input" id="avT" style="width:70px;"><option value="">?</option><option>6AM</option><option>3PM</option><option>7PM</option><option>10PM</option></select></td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream);">Blake</strong></td>
+        <td><select class="cell-input" id="blS" style="width:90px;"><option value="">?</option><option>Maths</option><option>Physics</option><option>History</option><option>Biology</option></select></td>
+        <td><select class="cell-input" id="blT" style="width:70px;"><option value="">?</option><option>6AM</option><option>3PM</option><option>7PM</option><option>10PM</option></select></td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream);">Casey</strong></td>
+        <td><select class="cell-input" id="caS" style="width:90px;"><option value="">?</option><option>Maths</option><option>Physics</option><option>History</option><option>Biology</option></select></td>
+        <td><select class="cell-input" id="caT" style="width:70px;"><option value="">?</option><option>6AM</option><option>3PM</option><option>7PM</option><option>10PM</option></select></td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream);">Dev</strong></td>
+        <td><select class="cell-input" id="dvS" style="width:90px;"><option value="">?</option><option>Maths</option><option>Physics</option><option>History</option><option>Biology</option></select></td>
+        <td><select class="cell-input" id="dvT" style="width:70px;"><option value="">?</option><option>6AM</option><option>3PM</option><option>7PM</option><option>10PM</option></select></td>
+      </tr>
+    </table>
+
+    <button class="check-btn" onclick="checkLogic()" style="margin-top:8px;">SUBMIT DEDUCTIONS</button>
+    <div class="feedback" id="fb"></div>
+
+    <hr class="div">
+    <p style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:2px;color:var(--gray);margin-bottom:8px;">STUCK? WORK THROUGH IT:</p>
+    <div style="font-family:'Courier Prime',monospace;font-size:10px;color:rgba(250,246,240,.35);line-height:2;">
+      Clue 4: Casey = 6AM (only morning slot).<br>
+      Clue 6: Blake = History.<br>
+      Clue 3: Blake is 4 hrs before Dev. Evening only → Blake=3PM, Dev=7PM.<br>
+      Clue 5: Physics = 10PM. Dev=7PM → Dev ≠ Physics.<br>
+      Clue 1: Biology = 7PM → Dev = Biology.<br>
+      Clue 5: Physics=10PM → Avery=10PM (only remaining), Avery=Physics.<br>
+      Casey gets Maths (remaining). Clue 2 confirms Avery≠Maths ✓
+    </div>
+  </div>
+
+  <div class="unlock-section" id="unlock">
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 9 COMPLETE — NINTH CODEWORD OBTAINED ✦</div>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
+      Flawless deduction. Sherlock would approve. One stage remains — the final gate.
+    </p>
+    <div class="clue-card">
+      <span class="clue-lbl">🔑 CODEWORD #9 — PENULTIMATE CLUE</span>
+      The ninth word is what a detective does when the facts are gathered and the truth becomes clear.<br><br>
+      <div class="clue-code">DEDUCE</div>
+    </div>
+    <a href="stage10.html" class="next-btn">→ The Secret Garden — FINAL STAGE</a>
+    <p class="next-note">FINAL STAGE: THE SECRET GARDEN — STAGE 10 OF 10</p>
+  </div>
+</div>
+
+<script>
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<8?'done':i===8?'active':'');d.appendChild(e);}
+
+// Correct answers:
+// Avery: Physics, 10PM
+// Blake: History, 3PM
+// Casey: Maths, 6AM
+// Dev:   Biology, 7PM
+const correct={avS:'Physics',avT:'10PM',blS:'History',blT:'3PM',caS:'Maths',caT:'6AM',dvS:'Biology',dvT:'7PM'};
+
+function checkLogic(){
+  let ok=true;
+  const fb=document.getElementById('fb');
+  const ids=['avS','avT','blS','blT','caS','caT','dvS','dvT'];
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    el.classList.remove('correct','wrong');
+    if(!el.value){ok=false;return;}
+    if(el.value===correct[id]){el.classList.add('correct');}
+    else{el.classList.add('wrong');ok=false;}
+  });
+  if(ok){
+    fb.className='feedback good';
+    fb.textContent='✓  Perfect deduction! Avery→Physics@10PM, Blake→History@3PM, Casey→Maths@6AM, Dev→Biology@7PM.';
+    setTimeout(()=>document.getElementById('unlock').classList.add('show'),900);
+  } else {
+    fb.className='feedback';
+    fb.textContent='✗  Some deductions are incorrect (red cells). Re-read the clues systematically.';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 8 — The Infirmary</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#080610;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(196,131,122,.07),transparent 55%);pointer-events:none;z-index:0;}
+/* Heartbeat line */
+.heartbeat{width:100%;height:60px;position:relative;margin:20px 0;overflow:hidden;}
+.heartbeat svg{width:100%;height:100%;}
+.hb-path{stroke:var(--rose);stroke-width:2;fill:none;stroke-dasharray:1200;stroke-dashoffset:1200;animation:drawHB 3s ease forwards 0.5s;}
+@keyframes drawHB{to{stroke-dashoffset:0}}
+/* Morse display */
+.morse-display{background:rgba(0,0,0,.6);border:1px solid rgba(201,168,76,.2);padding:24px;font-family:'Courier Prime',monospace;font-size:13px;letter-spacing:4px;color:var(--gold);line-height:2.2;text-align:center;margin:20px 0;position:relative;}
+.morse-display .md-label{position:absolute;top:-1px;left:16px;font-size:7px;letter-spacing:3px;background:var(--navy);color:var(--gray);padding:1px 8px;}
+.morse-char{display:inline-block;margin:0 8px;cursor:default;transition:all .3s;padding:4px 6px;}
+.morse-char:hover{color:var(--cream);background:rgba(201,168,76,.1);}
+.morse-char span{display:block;font-size:9px;letter-spacing:1px;color:rgba(250,246,240,.3);margin-top:2px;text-align:center;}
+/* Reference table */
+.morse-table{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;margin:18px 0;max-height:220px;overflow-y:auto;}
+.morse-ref{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:7px 10px;display:flex;justify-content:space-between;align-items:center;}
+.morse-ref .letter{font-family:'Courier Prime',monospace;font-weight:700;font-size:13px;color:var(--cream);}
+.morse-ref .code{font-family:'Courier Prime',monospace;font-size:10px;color:var(--gold);letter-spacing:2px;}
+/* Interactive beeper */
+.beeper{display:flex;gap:12px;justify-content:center;margin:20px 0;flex-wrap:wrap;}
+.bkey{background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);color:var(--gold);font-family:'Courier Prime',monospace;font-size:13px;padding:14px 28px;cursor:pointer;transition:all .2s;user-select:none;}
+.bkey:active,.bkey.lit{background:rgba(201,168,76,.3);border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,.4);}
+.beeper-output{font-family:'Courier Prime',monospace;font-size:20px;letter-spacing:8px;color:var(--gold);min-height:36px;text-align:center;margin:10px 0;}
+.beeper-decoded{font-family:'Playfair Display',serif;font-size:18px;color:var(--cream);text-align:center;min-height:30px;}
+.btools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0;}
+.btool{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(250,246,240,.5);font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:2px;padding:6px 14px;cursor:pointer;transition:all .2s;}
+.btool:hover{border-color:rgba(201,168,76,.3);color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="stage-bar">
+    <div class="stage-num">08</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 8 OF 10</span>
+      <div class="stage-title">The <em>Infirmary</em></div>
+    </div>
+  </div>
+
+  <p class="scene-intro">The school infirmary — where students came when the pressure got too much. The walls here have heard confessions, breakdowns, and breakthroughs. On the monitor by the window, someone left a message encoded in pulses. Morse code.</p>
+
+  <div class="heartbeat">
+    <svg viewBox="0 0 800 60" preserveAspectRatio="none">
+      <path class="hb-path" d="M0,30 L80,30 L100,30 L120,5 L140,55 L160,30 L200,30 L220,30 L240,5 L260,55 L280,30 L320,30 L340,30 L360,5 L380,55 L400,30 L440,30 L460,5 L480,55 L500,30 L560,30 L580,5 L600,55 L620,30 L700,30 L720,5 L740,55 L760,30 L800,30"/>
+    </svg>
+  </div>
+
+  <div class="pinned-note">
+    <strong>NOTE — On the monitor screen, blinking:</strong>
+    <br><br>
+    Morse code was invented because sometimes the most important messages are also the simplest ones.
+    ·-·· --- ...  is not just dots and dashes. It is a system. A language built on patience and pattern — 
+    exactly what Grade 10 requires.
+    <br><br>
+    Decode the message below. The hidden word is your codeword.
+    <span class="sig">— The Archivist</span>
+  </div>
+
+  <hr class="div">
+
+  <!-- DECODE PUZZLE -->
+  <div class="puzzle-box" data-label="PUZZLE — MORSE CODE DECODER">
+    <div class="puzzle-title">Decode the Monitor Message</div>
+    <p class="puzzle-desc">The message below is in Morse code. Use the reference chart to decode it. Each group separated by a slash (/) is one letter.</p>
+
+    <div class="morse-display">
+      <span class="md-label">MONITOR TRANSMISSION</span>
+      <div style="margin:8px 0;">
+        <div class="morse-char">·-<span>A</span></div>
+        <div class="morse-char">·-·<span>R</span></div>
+        <div class="morse-char">·-<span>A</span></div>
+        <div class="morse-char">·-·<span>R</span></div>
+        <div class="morse-char">-·-<span>K</span></div>
+      </div>
+      <div style="margin:10px 0;font-size:11px;color:rgba(250,246,240,.35);">
+        · - &nbsp; / &nbsp; · - · &nbsp; / &nbsp; · - &nbsp; / &nbsp; · - · &nbsp; / &nbsp; - · -
+      </div>
+    </div>
+
+    <p style="font-family:'Courier Prime',monospace;font-size:10px;color:rgba(250,246,240,.4);margin-bottom:16px;">The 5 decoded letters spell a word. Use the chart below and enter the decoded word:</p>
+
+    <!-- Reference chart -->
+    <div style="font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;">MORSE CODE REFERENCE:</div>
+    <div class="morse-table" id="mref"></div>
+
+    <div class="answer-wrap" style="margin-top:20px;">
+      <input class="ans-input" id="ai" placeholder="DECODED WORD…" maxlength="10">
+      <button class="check-btn" onclick="chk()">TRANSMIT</button>
+    </div>
+    <div class="feedback" id="fb"></div>
+
+    <hr class="div">
+
+    <!-- Interactive tapper for fun -->
+    <div class="puzzle-title" style="font-size:16px;margin-top:4px;">🎵 Bonus: Try the Morse Tapper</div>
+    <p class="puzzle-desc">Tap DOT and DASH to build your own code. SPACE adds a letter break. Fun extra — not required for the clue.</p>
+    <div class="beeper">
+      <button class="bkey" id="dotBtn" onmousedown="tap('·')" onmouseup="unlit('dotBtn')" ontouchstart="tap('·')" ontouchend="unlit('dotBtn')">· DOT</button>
+      <button class="bkey" id="dashBtn" onmousedown="tap('-')" onmouseup="unlit('dashBtn')" ontouchstart="tap('-')" ontouchend="unlit('dashBtn')">— DASH</button>
+    </div>
+    <div class="btools">
+      <button class="btool" onclick="addSpace()">SPACE (next letter)</button>
+      <button class="btool" onclick="clearMorse()">CLEAR</button>
+    </div>
+    <div class="beeper-output" id="bOut">···</div>
+    <div class="beeper-decoded" id="bDec"></div>
+  </div>
+
+  <div class="unlock-section" id="unlock">
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 8 COMPLETE — EIGHTH CODEWORD OBTAINED ✦</div>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
+      The signal comes through. Even in the hardest moments, the message is clear if you listen carefully enough.
+    </p>
+    <div class="clue-card">
+      <span class="clue-lbl">🔑 CODEWORD #8 — WRITE THIS DOWN</span>
+      The eighth word is what you feel when you understand something for the first time — when the dots and dashes finally make sense.<br><br>
+      <div class="clue-code">SIGNAL</div>
+    </div>
+    <a href="stage9.html" class="next-btn">→ The Principal's Office</a>
+    <p class="next-note">NEXT STAGE: THE PRINCIPAL'S OFFICE — LOGIC GRID</p>
+  </div>
+</div>
+
+<script>
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<7?'done':i===7?'active':'');d.appendChild(e);}
+
+const morseMap={
+  'A':'·-','B':'-···','C':'-.-.','D':'-··','E':'·','F':'··-·','G':'--.','H':'····',
+  'I':'··','J':'·---','K':'-·-','L':'·-··','M':'--','N':'-·','O':'---','P':'·--.','Q':'--·-',
+  'R':'·-·','S':'···','T':'-','U':'··-','V':'···-','W':'·--','X':'-··-','Y':'-·--','Z':'--..'
+};
+const mref=document.getElementById('mref');
+Object.entries(morseMap).forEach(([l,m])=>{
+  const div=document.createElement('div');div.className='morse-ref';
+  div.innerHTML=`<span class="letter">${l}</span><span class="code">${m}</span>`;
+  mref.appendChild(div);
+});
+
+function chk(){
+  const v=document.getElementById('ai').value.trim().toUpperCase();
+  const fb=document.getElementById('fb');
+  // ·- = A, ·-· = R, ·- = A, ·-· = R, -·- = K → ARARK
+  if(v==='ARARK'||v==='MARK'||v==='REMARK'){
+    fb.className='feedback good';
+    fb.textContent='✓  Correct! A-R-A-R-K decoded from the transmission. The infirmary yields its secret.';
+    setTimeout(()=>document.getElementById('unlock').classList.add('show'),900);
+  } else {
+    fb.className='feedback';
+    fb.textContent='✗  Check the chart: ·- = A, ·-· = R, ·- = A, ·-· = R, -·- = K. Read the letters in order.';
+  }
+}
+document.getElementById('ai').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
+
+// Tapper
+const revMorse={};
+Object.entries(morseMap).forEach(([l,m])=>revMorse[m]=l);
+let tapSeq='',tapStr='';
+function tap(c){
+  tapSeq+=c;
+  document.getElementById('bOut').textContent=tapStr+tapSeq;
+  const id=c==='·'?'dotBtn':'dashBtn';
+  document.getElementById(id).classList.add('lit');
+  decode();
+}
+function unlit(id){document.getElementById(id).classList.remove('lit');}
+function addSpace(){
+  if(tapSeq){tapStr+=tapSeq+' ';tapSeq='';document.getElementById('bOut').textContent=tapStr;decode();}
+}
+function clearMorse(){tapSeq='';tapStr='';document.getElementById('bOut').textContent='···';document.getElementById('bDec').textContent='';}
+function decode(){
+  const parts=tapStr.trim().split(' ').filter(Boolean);
+  const words=parts.map(p=>revMorse[p]||'?').join('');
+  document.getElementById('bDec').textContent=words+(tapSeq?'+':'');
+}
+</script>
+</body>
+</html>

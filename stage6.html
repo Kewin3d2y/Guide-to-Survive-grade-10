@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 6 — The Rooftop</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#020208;}
+.star-bg{position:fixed;inset:0;z-index:0;}
+.star-dot{position:absolute;background:white;border-radius:50%;animation:tw var(--d) ease-in-out infinite var(--dl);}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:.9}}
+.sky-canvas{position:relative;width:100%;height:380px;margin:24px 0;background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.1);overflow:hidden;cursor:crosshair;}
+.star-node{position:absolute;transform:translate(-50%,-50%);}
+.star-node .s-dot{width:12px;height:12px;border-radius:50%;background:rgba(201,168,76,.4);border:2px solid rgba(201,168,76,.6);transition:all .3s;cursor:pointer;position:relative;}
+.star-node .s-dot:hover,.star-node .s-dot.active{background:var(--gold);border-color:var(--gold);box-shadow:0 0 16px rgba(201,168,76,.8);transform:scale(1.3);}
+.star-node .s-dot.connected{background:var(--sage);border-color:var(--sage);box-shadow:0 0 12px rgba(122,158,126,.6);}
+.star-node .s-name{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-family:'Courier Prime',monospace;font-size:8px;color:rgba(201,168,76,.5);white-space:nowrap;pointer-events:none;}
+.sky-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.constellation-line{stroke:rgba(122,158,126,.5);stroke-width:1.5;stroke-dasharray:4,4;animation:dashAnim 2s linear infinite;}
+@keyframes dashAnim{to{stroke-dashoffset:-16}}
+/* question cards */
+.q-card{background:rgba(26,26,46,.85);border:1px solid rgba(201,168,76,.15);padding:22px 26px;margin:12px 0;transition:border-color .3s;}
+.q-num{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--gold);display:block;margin-bottom:8px;}
+.q-text{font-family:'Playfair Display',serif;font-size:15px;color:var(--cream);line-height:1.5;margin-bottom:14px;}
+.q-opts{display:flex;flex-direction:column;gap:6px;}
+.qo{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:9px 14px;cursor:pointer;font-family:'Courier Prime',monospace;font-size:11px;color:rgba(250,246,240,.75);transition:all .22s;text-align:left;}
+.qo:hover{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.07);}
+.qo.correct{background:rgba(122,158,126,.2);border-color:var(--sage);color:var(--sage);pointer-events:none;}
+.qo.wrong{background:rgba(139,26,26,.2);border-color:var(--red);color:var(--rose);pointer-events:none;}
+</style>
+</head>
+<body>
+<div class="star-bg" id="sbg"></div>
+
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="stage-bar">
+    <div class="stage-num">06</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 6 OF 10</span>
+      <div class="stage-title">The <em>Rooftop</em></div>
+    </div>
+  </div>
+
+  <p class="scene-intro">The trail leads upward — to the school rooftop, where someone used to come to think, to breathe, and to remember that the universe is large and exams are small. They left a star map and a set of questions among the constellations.</p>
+
+  <div class="pinned-note">
+    <strong>NOTE — Taped to the door of the rooftop stairwell:</strong>
+    <br><br>
+    From here you can see everything. Every star is a subject, every constellation is a connection between ideas. The next codeword is hidden in the pattern.
+    <br><br>
+    Click the stars in the order shown below to form the constellation. Then answer the questions it unlocks. 
+    <span class="sig">— The Archivist</span>
+  </div>
+
+  <hr class="div">
+
+  <!-- CONSTELLATION PUZZLE -->
+  <div class="puzzle-box" data-label="PUZZLE I — MAP THE CONSTELLATION">
+    <div class="puzzle-title">Connect the Stars in Order</div>
+    <p class="puzzle-desc">Click the numbered stars in order (1→2→3→4→5) to trace the constellation. The shape it forms spells something.</p>
+
+    <div class="sky-canvas" id="skyCanvas">
+      <svg class="sky-svg" id="skySvg"></svg>
+      <!-- Stars positioned to spell a rough shape -->
+    </div>
+    <p style="font-family:'Courier Prime',monospace;font-size:9px;color:var(--gray);text-align:center;">Click stars in order: 1 → 2 → 3 → 4 → 5</p>
+    <div class="feedback" id="cfb" style="text-align:center;margin-top:12px;"></div>
+  </div>
+
+  <!-- STAR QUESTIONS -->
+  <div class="puzzle-box" data-label="PUZZLE II — QUESTIONS FROM THE STARS" id="qbox" style="display:none;">
+    <p class="score-lbl" id="sc">STARS ANSWERED: 0 / 3</p>
+    <div class="prog-wrap"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+    <div id="qs"></div>
+    <div class="feedback" id="qfb"></div>
+  </div>
+
+  <div class="unlock-section" id="unlock">
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 6 COMPLETE — SIXTH CODEWORD OBTAINED ✦</div>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
+      You mapped the stars. A reminder: you are a small, extraordinary thing in a very large universe. That is not a reason to panic — it is a reason to breathe.
+    </p>
+    <div class="clue-card">
+      <span class="clue-lbl">🔑 CODEWORD #6 — WRITE THIS DOWN</span>
+      The sixth word is what the person who compiled this guide came to the rooftop to find on the hardest study nights.<br><br>
+      <div class="clue-code">PERSPECTIVE</div>
+    </div>
+    <a href="stage7.html" class="next-btn">→ The Old Classroom</a>
+    <p class="next-note">NEXT STAGE: THE OLD CLASSROOM — CROSSWORD</p>
+  </div>
+</div>
+
+<script>
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<5?'done':i===5?'active':'');d.appendChild(e);}
+
+// Background stars
+const sbg=document.getElementById('sbg');
+for(let i=0;i<150;i++){
+  const s=document.createElement('div'); s.className='star-dot';
+  const sz=Math.random()*2+.5;
+  s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--dl:-${Math.random()*6}s;`;
+  sbg.appendChild(s);
+}
+
+// Constellation stars — positions as % of canvas
+const stars=[
+  {id:1, label:'Orion', lx:20, ly:30},
+  {id:2, label:'Vega',  lx:40, ly:55},
+  {id:3, label:'Sirius',lx:60, ly:25},
+  {id:4, label:'Deneb', lx:75, ly:60},
+  {id:5, label:'Altair',lx:50, ly:80},
+];
+const correctOrder=[1,2,3,4,5];
+let clickSeq=[], connected=[];
+
+function buildSky(){
+  const canvas=document.getElementById('skyCanvas');
+  const w=canvas.offsetWidth, h=canvas.offsetHeight||380;
+
+  stars.forEach(s=>{
+    const node=document.createElement('div');
+    node.className='star-node';
+    node.style.left=`${s.lx}%`; node.style.top=`${s.ly}%`;
+    node.innerHTML=`<div class="s-dot" id="sd${s.id}" onclick="clickStar(${s.id})">${s.id}</div><div class="s-name">${s.label}</div>`;
+    canvas.appendChild(node);
+  });
+}
+
+function clickStar(id){
+  const expected=correctOrder[clickSeq.length];
+  const dot=document.getElementById(`sd${id}`);
+  if(id===expected){
+    dot.classList.add('connected');
+    clickSeq.push(id);
+    if(clickSeq.length>1){
+      drawLine(clickSeq[clickSeq.length-2], id);
+    }
+    if(clickSeq.length===5){
+      document.getElementById('cfb').className='feedback good';
+      document.getElementById('cfb').textContent='✓  Constellation mapped! The pattern is revealed. Now answer the questions below.';
+      setTimeout(()=>{document.getElementById('qbox').style.display='block';},800);
+    }
+  } else {
+    dot.style.animation='none'; setTimeout(()=>dot.style.animation='',100);
+    document.getElementById('cfb').className='feedback';
+    document.getElementById('cfb').textContent=`✗  Wrong star. Continue the sequence — next should be star ${expected}.`;
+  }
+}
+
+function drawLine(fromId, toId){
+  const canvas=document.getElementById('skyCanvas');
+  const w=canvas.offsetWidth, h=canvas.offsetHeight||380;
+  const s1=stars.find(s=>s.id===fromId), s2=stars.find(s=>s.id===toId);
+  const svg=document.getElementById('skySvg');
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',`${s1.lx}%`); line.setAttribute('y1',`${s1.ly}%`);
+  line.setAttribute('x2',`${s2.lx}%`); line.setAttribute('y2',`${s2.ly}%`);
+  line.setAttribute('class','constellation-line');
+  svg.appendChild(line);
+}
+
+const Qs=[
+  {q:"Looking at the night sky, a student feels overwhelmed by how vast the universe is and how small their problems seem. This mental shift is called what?",
+   opts:["Existential crisis","Perspective — the healthy kind","Procrastination","Astronomy"],cor:1,
+   fb:"Perspective. The ability to zoom out from your current problem and see it in its true scale is one of the most powerful tools a Grade 10 student can have."},
+  {q:"The star Polaris (the North Star) has guided navigators for millennia because it never moves. What is the Grade 10 equivalent of the North Star?",
+   opts:["Your school timetable","Your exam date","Your core reason for working hard — your 'why'","Your rank in class"],cor:2,
+   fb:"Your 'why.' When everything else spins and shifts, knowing your deeper reason for working keeps you oriented."},
+  {q:"A constellation only exists as a pattern when viewed from a specific angle. Similarly, your mistakes in Grade 10 only look like failures from which perspective?",
+   opts:["From the examiner's perspective","From too close — zoom out and they become lessons","From your parents' perspective","From your competitors' perspective"],cor:1,
+   fb:"From too close. Every mistake in Grade 10 is a data point, not a verdict. Zoom out. You are still learning to navigate."},
+];
+let qsolved=0, qattempted=new Set();
+
+function buildQs(){
+  const cont=document.getElementById('qs');
+  cont.innerHTML='';
+  Qs.forEach((q,qi)=>{
+    const div=document.createElement('div'); div.className='q-card';
+    div.innerHTML=`<span class="q-num">STAR QUESTION ${qi+1}</span>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.opts.map((o,oi)=>`<button class="qo" onclick="ansQ(${qi},${oi})">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}</div>`;
+    cont.appendChild(div);
+  });
+}
+function ansQ(qi,oi){
+  if(qattempted.has(qi))return; qattempted.add(qi);
+  const q=Qs[qi];
+  document.querySelectorAll(`[onclick*="ansQ(${qi},"]`).forEach((b,j)=>{
+    b.classList.add(j===q.cor?'correct':j===oi&&oi!==q.cor?'wrong':'');
+    b.disabled=true;
+  });
+  if(oi===q.cor)qsolved++;
+  document.getElementById('sc').textContent=`STARS ANSWERED: ${qsolved} / 3`;
+  document.getElementById('pf').style.width=`${(qattempted.size/3)*100}%`;
+  document.getElementById('qfb').className='feedback'+(oi===q.cor?' good':'');
+  document.getElementById('qfb').textContent=q.fb;
+  if(qattempted.size===3)setTimeout(()=>document.getElementById('unlock').classList.add('show'),1500);
+}
+
+buildSky();
+buildQs();
+</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 5 — The Music Room</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#08080e;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(196,131,122,.06),transparent 55%);pointer-events:none;z-index:0;}
+.staff{width:100%;position:relative;height:80px;margin:24px 0;}
+.staff-line{position:absolute;left:0;right:0;height:1px;background:rgba(201,168,76,.25);}
+.note-el{position:absolute;width:20px;height:20px;background:var(--cream);border-radius:50%;border:3px solid var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Courier Prime',monospace;font-size:8px;color:var(--navy);}
+.riddle-card{background:rgba(26,26,46,.8);border:1px solid rgba(196,131,122,.2);padding:24px 28px;margin:14px 0;border-radius:2px;transition:all .3s;}
+.riddle-card:hover{border-color:var(--rose);}
+.riddle-n{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--rose);margin-bottom:8px;display:block;}
+.riddle-text{font-family:'Playfair Display',serif;font-size:16px;color:var(--cream);line-height:1.6;margin-bottom:14px;}
+.riddle-opts{display:flex;flex-wrap:wrap;gap:8px;}
+.ropt{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:8px 16px;cursor:pointer;font-family:'Courier Prime',monospace;font-size:11px;color:rgba(250,246,240,.7);transition:all .22s;}
+.ropt:hover{border-color:var(--rose);color:var(--cream);}
+.ropt.correct{background:rgba(122,158,126,.2);border-color:var(--sage);color:var(--sage);pointer-events:none;}
+.ropt.wrong{background:rgba(139,26,26,.2);border-color:var(--red);color:var(--rose);pointer-events:none;}
+/* Staff animation */
+@keyframes noteFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.floatnote{animation:noteFloat 2s ease-in-out infinite;}
+/* Sound wave visual */
+.wave{display:flex;align-items:center;gap:4px;justify-content:center;margin:20px 0;}
+.wave-bar{width:4px;background:var(--rose);border-radius:2px;animation:waveAnim var(--d) ease-in-out infinite var(--dl);}
+@keyframes waveAnim{0%,100%{height:8px;opacity:.4}50%{height:var(--h);opacity:.9}}
+</style>
+</head>
+<body>
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="stage-bar">
+    <div class="stage-num">05</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 5 OF 10</span>
+      <div class="stage-title">The <em>Music</em> Room</div>
+    </div>
+  </div>
+
+  <p class="scene-intro">The trail echoes here — in the room where the school band rehearses, where sound is mathematics made beautiful, and where someone left a series of riddles written on the sheet music stand.</p>
+
+  <!-- Sound wave decoration -->
+  <div class="wave" id="wave"></div>
+
+  <div class="pinned-note">
+    <strong>NOTE — Tucked into the sheet music stand:</strong>
+    <br><br>
+    Music is rhythm and pattern. So is studying. The person who compiled the guide understood both.
+    These riddles are about the connections between music, memory, and the life of a Grade 10 student.
+    Answer them all correctly and the fifth codeword is yours.
+    <span class="sig">— The Archivist</span>
+  </div>
+
+  <hr class="div">
+
+  <div class="puzzle-box" data-label="RIDDLE ROUND — THE MUSIC ROOM">
+    <p class="score-lbl" id="sc">RIDDLES SOLVED: 0 / 4</p>
+    <div class="prog-wrap"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+    <div id="riddles"></div>
+    <div class="feedback" id="fb"></div>
+  </div>
+
+  <div class="unlock-section" id="unlock">
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 5 COMPLETE — FIFTH CODEWORD OBTAINED ✦</div>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
+      The music room reveals its secret. You have rhythm — in thinking, in learning, in persisting.
+    </p>
+    <div class="clue-card">
+      <span class="clue-lbl">🔑 CODEWORD #5 — HALF WAY THERE</span>
+      The fifth word is what every great student has — a steady beat that carries them through even the hardest days.<br><br>
+      <div class="clue-code">RHYTHM</div>
+    </div>
+    <a href="stage6.html" class="next-btn">→ The Rooftop</a>
+    <p class="next-note">NEXT STAGE: THE ROOFTOP — STAR MAP</p>
+  </div>
+</div>
+
+<script>
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<4?'done':i===4?'active':'');d.appendChild(e);}
+
+// Wave bars
+const wv=document.getElementById('wave');
+const heights=[12,20,30,44,60,44,30,44,60,44,30,20,12];
+heights.forEach((h,i)=>{const b=document.createElement('div');b.className='wave-bar';b.style.cssText=`height:${h}px;--h:${h}px;--d:${0.8+i*.1}s;--dl:-${i*.15}s;`;wv.appendChild(b);});
+
+const Qs=[
+  {q:"A student listens to a 3-minute song on repeat while studying. After 20 loops, how many minutes have they spent NOT studying?",
+   opts:["20 minutes","60 minutes","None — music helps focus","It depends on the song"],cor:1,
+   fb:"60 minutes. That's a full hour lost. Unless the music genuinely helps you focus — in which case, curate your playlist carefully."},
+  {q:"In music, a 'rest' is a period of silence. In studying, what is the equivalent — and why is it essential?",
+   opts:["A break — because brains consolidate learning during rest","A distraction — to be minimised","Free time — to be earned only after exams","A mistake — serious students never rest"],cor:0,
+   fb:"Exactly. Rest is not weakness. It's when your brain consolidates everything it just learned. Sleep and breaks are study tools."},
+  {q:"A symphony has four movements, each with a distinct mood and pace. Which Grade 10 student habit best mirrors this structure?",
+   opts:["Studying one subject for 8 hours straight","Breaking study into focused blocks with different subjects and rest periods","Playing music instead of studying","Practising only the easy parts"],cor:1,
+   fb:"Variety of pace and subject — like movements in a symphony — keeps your brain engaged. Monotony is the enemy of memory."},
+  {q:"Dead Poets Society famously used poetry and verse to awaken passion. What does this suggest about rote memorisation vs. deep understanding?",
+   opts:["Memorisation is always enough for ICSE","Understanding why something matters makes it stick far longer than memorising it","Only arts students need deep understanding","Passion has no place in exam preparation"],cor:1,
+   fb:"Understanding is the music. Memorisation is just the sheet. You can read the notes — or you can make them sing."},
+];
+
+let solved=0, attempted=new Set();
+
+function build(){
+  const cont=document.getElementById('riddles');
+  cont.innerHTML='';
+  Qs.forEach((q,qi)=>{
+    const div=document.createElement('div');
+    div.className='riddle-card';
+    div.innerHTML=`<span class="riddle-n">RIDDLE ${qi+1}</span>
+      <div class="riddle-text">${q.q}</div>
+      <div class="riddle-opts">${q.opts.map((o,oi)=>`<button class="ropt" data-qi="${qi}" data-oi="${oi}" onclick="answer(${qi},${oi})">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}</div>`;
+    cont.appendChild(div);
+  });
+}
+
+function answer(qi,oi){
+  if(attempted.has(qi))return;
+  attempted.add(qi);
+  const q=Qs[qi];
+  document.querySelectorAll(`[data-qi="${qi}"]`).forEach((b,j)=>{
+    b.classList.add(j===q.cor?'correct':j===oi&&oi!==q.cor?'wrong':'');
+    b.disabled=true;
+  });
+  if(oi===q.cor)solved++;
+  document.getElementById('sc').textContent=`RIDDLES SOLVED: ${solved} / 4`;
+  document.getElementById('pf').style.width=`${(attempted.size/4)*100}%`;
+  document.getElementById('fb').className='feedback'+(oi===q.cor?' good':'');
+  document.getElementById('fb').textContent=q.fb;
+  if(attempted.size===4)setTimeout(()=>document.getElementById('unlock').classList.add('show'),1500);
+}
+build();
+</script>
+</body>
+</html>

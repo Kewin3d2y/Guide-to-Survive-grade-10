@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 10 — The Secret Garden · FINAL</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#04080a;cursor:default;}
+/* Garden atmosphere */
+body::before{background-image:linear-gradient(rgba(122,158,126,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(122,158,126,.03) 1px,transparent 1px);background-size:40px 40px;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(122,158,126,.08),transparent 55%),radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.04),transparent 50%);pointer-events:none;z-index:0;}
+/* Fireflies */
+.firefly{position:fixed;width:4px;height:4px;background:rgba(201,168,76,.8);border-radius:50%;pointer-events:none;z-index:0;animation:fly var(--d) ease-in-out infinite var(--dl);box-shadow:0 0 6px rgba(201,168,76,.6);}
+@keyframes fly{0%{transform:translate(0,0);opacity:0}20%{opacity:.9}80%{opacity:.6}100%{transform:translate(var(--dx),var(--dy));opacity:0}}
+/* Vines decoration */
+.vine-top{position:fixed;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--sage),transparent,var(--sage),transparent);opacity:.2;z-index:1;}
+.vine-left{position:fixed;top:0;left:0;bottom:0;width:4px;background:linear-gradient(180deg,transparent,var(--sage),transparent,var(--sage),transparent);opacity:.2;z-index:1;}
+/* Final gate */
+.gate{background:rgba(13,13,13,.95);border:1px solid rgba(201,168,76,.3);padding:50px 40px;margin:40px 0;text-align:center;position:relative;}
+.gate::before{content:'⚿  THE FINAL GATE  ⚿';position:absolute;top:-1px;left:50%;transform:translateX(-50%);font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:5px;background:var(--gold);color:var(--navy);padding:4px 20px;font-weight:700;white-space:nowrap;}
+.gate-lock{font-size:64px;margin-bottom:20px;animation:lockPulse 3s ease-in-out infinite;}
+@keyframes lockPulse{0%,100%{filter:drop-shadow(0 0 0px rgba(201,168,76,0))}50%{filter:drop-shadow(0 0 20px rgba(201,168,76,.5))}}
+.gate-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--cream);margin-bottom:8px;}
+.gate-desc{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:2px;color:rgba(250,246,240,.35);line-height:2;margin-bottom:30px;}
+/* 10 word inputs */
+.words-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:24px 0;text-align:left;}
+.word-slot{position:relative;}
+.word-slot label{font-family:'Courier Prime',monospace;font-size:7px;letter-spacing:3px;color:var(--gray);display:block;margin-bottom:4px;}
+.word-slot input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);color:var(--cream);font-family:'Courier Prime',monospace;font-size:12px;letter-spacing:2px;padding:10px 12px;outline:none;text-transform:uppercase;}
+.word-slot input:focus{border-color:var(--gold);}
+.word-slot input.ok{border-color:var(--sage);background:rgba(122,158,126,.1);color:var(--sage);}
+.word-slot input.err{border-color:var(--red);background:rgba(139,26,26,.1);color:var(--rose);}
+.word-slot .tick{position:absolute;right:8px;top:28px;font-size:14px;display:none;}
+.word-slot input.ok~.tick{display:block;color:var(--sage);}
+.unlock-btn{background:rgba(201,168,76,.1);border:2px solid var(--gold);color:var(--gold);font-family:'Courier Prime',monospace;font-size:12px;letter-spacing:5px;padding:18px 60px;cursor:pointer;transition:all .4s;text-transform:uppercase;position:relative;overflow:hidden;margin-top:10px;}
+.unlock-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-100%);transition:transform .4s;}
+.unlock-btn:hover::before{transform:translateX(0);}
+.unlock-btn span{position:relative;z-index:1;}
+.unlock-btn:hover span{color:var(--navy);}
+.gate-fb{font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:2px;min-height:24px;margin-top:12px;color:var(--rose);}
+/* codewords hint */
+.cw-reminder{background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.12);padding:20px 24px;margin:24px 0;font-family:'Courier Prime',monospace;font-size:10px;color:rgba(250,246,240,.4);line-height:2.2;}
+.cw-reminder strong{color:rgba(201,168,76,.6);}
+/* VICTORY */
+#victory{display:none;text-align:center;}
+#victory.show{display:block;animation:bigReveal 1.5s ease;}
+@keyframes bigReveal{from{opacity:0;filter:blur(20px);transform:scale(.9)}60%{filter:blur(0)}to{opacity:1;transform:scale(1)}}
+.v-badge{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:7px;color:var(--gold);margin-bottom:30px;animation:glowPulse 2s ease-in-out infinite;}
+@keyframes glowPulse{0%,100%{text-shadow:0 0 10px rgba(201,168,76,.3)}50%{text-shadow:0 0 40px rgba(201,168,76,.8),0 0 80px rgba(201,168,76,.3)}}
+.v-title{font-family:'Playfair Display',serif;font-size:clamp(36px,7vw,72px);font-weight:900;color:var(--cream);line-height:1.1;margin-bottom:16px;}
+.v-title em{color:var(--gold);}
+.v-sub{font-size:18px;font-style:italic;color:var(--rose);margin-bottom:50px;}
+/* Final letter */
+.final-letter{background:var(--paper);color:#1a1510;padding:50px 55px;max-width:640px;margin:30px auto;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 1px rgba(201,168,76,.3),inset 0 0 0 24px transparent;position:relative;font-family:'EB Garamond',serif;text-align:left;}
+.final-letter::before{content:'';position:absolute;inset:18px;border:1px solid rgba(0,0,0,.05);pointer-events:none;}
+.fl-header{text-align:center;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(0,0,0,.1);}
+.fl-header .stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-family:'Courier Prime',monospace;font-size:7px;letter-spacing:4px;padding:3px 10px;transform:rotate(-2deg);margin-bottom:12px;}
+.fl-header h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#1a1510;}
+.fl-header p{font-style:italic;font-size:14px;color:var(--red);margin-top:6px;}
+.fl-body p{font-size:15px;line-height:2;color:#2c2218;margin-bottom:16px;}
+.fl-body .verse{border-left:3px solid var(--red);padding-left:20px;margin:24px 0;font-style:italic;font-size:15px;color:#5c4030;line-height:1.8;}
+.fl-sig{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--red);margin-top:28px;}
+/* Download */
+.dl-section{text-align:center;margin:40px 0;}
+.dl-btn{display:inline-block;background:var(--navy);color:var(--gold);font-family:'Courier Prime',monospace;font-weight:700;font-size:12px;letter-spacing:4px;padding:20px 56px;text-decoration:none;border:2px solid var(--gold);transition:all .4s;margin:8px;}
+.dl-btn:hover{background:var(--gold);color:var(--navy);transform:translateY(-3px);box-shadow:0 12px 30px rgba(201,168,76,.3);}
+.dl-btn.sec{background:transparent;color:rgba(250,246,240,.3);border-color:rgba(250,246,240,.1);font-size:9px;letter-spacing:3px;padding:12px 30px;}
+.dl-btn.sec:hover{background:rgba(255,255,255,.05);color:var(--cream);}
+.case-closed{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:6px;color:rgba(250,246,240,.12);text-align:center;margin-top:60px;}
+/* Confetti */
+.confetti-piece{position:fixed;top:-10px;animation:confFall var(--d) ease-in forwards var(--dl);pointer-events:none;z-index:100;opacity:0;}
+@keyframes confFall{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),110vh) rotate(var(--r))}}
+/* Stage 10 label */
+.ten-badge{display:inline-flex;align-items:center;gap:12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);padding:8px 20px;margin-bottom:24px;}
+.ten-badge .n{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--gold);line-height:1;}
+.ten-badge p{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--gray);line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="vine-top"></div>
+<div class="vine-left"></div>
+<div id="ffContainer"></div>
+
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="ten-badge">
+    <span class="n">10</span>
+    <p>FINAL STAGE<br>THE SECRET GARDEN</p>
+  </div>
+
+  <div class="stage-bar">
+    <div class="stage-num">10</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 10 OF 10</span>
+      <div class="stage-title">The <em>Secret</em> Garden</div>
+    </div>
+  </div>
+
+  <p class="scene-intro">
+    You made it. Ten stages. Ten clues. Ten tests of curiosity, persistence, and heart. 
+    This garden is where the archivist came to think, to breathe, and to remember why all of it — the studying, the sleepless nights, the pressure — was worth it.
+    The guide is locked behind the final gate. You have all ten codewords. Use them now.
+  </p>
+
+  <div class="quote-box">
+    "We don't read and write poetry because it's cute. We read and write poetry because we are members of the human race. And the human race is filled with passion."<br>
+    <span style="font-size:12px;font-family:'Courier Prime',monospace;letter-spacing:2px;color:var(--gold);margin-top:8px;display:block;">— Dead Poets Society</span>
+  </div>
+
+  <hr class="div">
+
+  <!-- THE GATE -->
+  <div class="gate" id="gateSection">
+    <div class="gate-lock" id="lockIcon">🔒</div>
+    <div class="gate-title">The Final Gate</div>
+    <div class="gate-desc">
+      TEN CODEWORDS. COLLECTED ACROSS TEN STAGES.<br>
+      ENTER THEM BELOW IN ORDER. THE GUIDE UNLOCKS ONLY FOR THOSE WHO TRULY EARNED IT.
+    </div>
+
+    <!-- Hint: all codewords if they forgot -->
+    <div class="cw-reminder">
+      <strong>Codeword Locations:</strong><br>
+      #1 Stage 1 — The Crime Scene &nbsp;·&nbsp; #2 Stage 2 — The Library &nbsp;·&nbsp; #3 Stage 3 — Chemistry Lab<br>
+      #4 Stage 4 — The Art Room &nbsp;·&nbsp; #5 Stage 5 — Music Room &nbsp;·&nbsp; #6 Stage 6 — The Rooftop<br>
+      #7 Stage 7 — Old Classroom &nbsp;·&nbsp; #8 Stage 8 — The Infirmary &nbsp;·&nbsp; #9 Stage 9 — Principal's Office<br>
+      #10 is hidden in plain sight — look at what number stage this is, and what subject all ten stages are helping you survive.
+    </div>
+
+    <div class="words-grid" id="wordsGrid"></div>
+
+    <button class="unlock-btn" onclick="tryUnlock()"><span>⚿  OPEN THE GATE</span></button>
+    <div class="gate-fb" id="gateFb"></div>
+  </div>
+
+  <!-- VICTORY -->
+  <div id="victory">
+    <div class="v-badge">✦ THE CASE IS CLOSED · THE GUIDE IS YOURS ✦</div>
+    <div class="v-title">Carpe <em>Diem</em>,<br>Detective.</div>
+    <div class="v-sub">You cracked the case. All ten clues. All ten stages. Every single one.</div>
+
+    <div class="final-letter">
+      <div class="fl-header">
+        <div class="stamp">CASE FILE GR10-ICSE — DECLASSIFIED</div>
+        <h2>The Guide to Survive Grade 10</h2>
+        <p>ICSE Edition &nbsp;·&nbsp; Compiled by a Survivor</p>
+      </div>
+      <div class="fl-body">
+        <p>You followed a trail across ten rooms — a crime scene, a library, a chemistry lab, an art room, a music room, a rooftop, an old classroom, an infirmary, a principal's office, and finally, this garden.</p>
+        <p>Ten clues. Ten puzzles. Each one asking you to be curious, to think, to not give up when it got hard. Which is — not coincidentally — exactly what Grade 10 will ask of you, every single day.</p>
+        <div class="verse">
+          "You must strive to find your own voice. Because the longer you wait to begin,<br>
+          the less likely you are to find it at all."<br>
+          — Dead Poets Society
+        </div>
+        <p>Inside this guide are nine case files: your subjects, your study methods, your exam technique, the truth about burnout, the people who'll carry you through, the small joys worth protecting, and the survival kit for the weeks when everything feels impossible.</p>
+        <p>You don't have to be perfect. You just have to show up — the way you showed up for every stage of this hunt — with curiosity, with effort, and with the quiet stubbornness of someone who doesn't quit.</p>
+        <p>The summer is on the other side of this year. And you're going to walk into it having discovered something important: <em>you are more than your marks.</em> You are the person who solved a ten-stage mystery because they cared enough to try.</p>
+        <p>That person is going to be just fine.</p>
+        <p class="fl-sig">With everything — &nbsp; T.S. (A Survivor of Grade 10 ICSE)</p>
+      </div>
+    </div>
+
+    <div class="dl-section">
+      <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:5px;color:var(--gold);margin-bottom:24px;">✦ YOUR SURVIVAL GUIDE AWAITS ✦</div>
+      <a href="Guide_To_Survive_Grade10_ICSE.pdf" class="dl-btn" download>
+        ⬇ &nbsp; Download Your Grade 10 Survival Guide
+      </a>
+      <br>
+      <a href="Guide_To_Survive_Grade10_ICSE.pdf" class="dl-btn" target="_blank">
+        📖 &nbsp; Read Online
+      </a>
+      <br>
+      <a href="stage1.html" class="dl-btn sec">↩ Restart the Mystery</a>
+    </div>
+
+    <div class="case-closed">
+      · · · CASE #GR10-ICSE-2025 · · · STATUS: SOLVED · · · GRADE 10: SURVIVABLE · · · YOU: MORE THAN YOUR MARKS · · ·
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Dots
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<9?'done':i===9?'active':'');d.appendChild(e);}
+
+// Fireflies
+const ffc=document.getElementById('ffContainer');
+for(let i=0;i<25;i++){
+  const f=document.createElement('div');f.className='firefly';
+  f.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${4+Math.random()*8}s;--dl:-${Math.random()*10}s;--dx:${(Math.random()-.5)*300}px;--dy:${(Math.random()-.5)*200}px;`;
+  ffc.appendChild(f);
+}
+
+// Codewords (all 10)
+const CWS=[
+  {n:1, w:'CARPE',       hint:'Stage 1 — Crime Scene'},
+  {n:2, w:'ELEMENT',     hint:'Stage 2 — Library'},
+  {n:3, w:'PERIODIC',    hint:'Stage 3 — Chemistry Lab'},
+  {n:4, w:'SPECTRUM',    hint:'Stage 4 — Art Room'},
+  {n:5, w:'RHYTHM',      hint:'Stage 5 — Music Room'},
+  {n:6, w:'PERSPECTIVE', hint:'Stage 6 — Rooftop'},
+  {n:7, w:'SYNTHESIS',   hint:'Stage 7 — Old Classroom'},
+  {n:8, w:'SIGNAL',      hint:'Stage 8 — Infirmary'},
+  {n:9, w:'DEDUCE',      hint:'Stage 9 — Principal\'s Office'},
+  {n:10,w:'ICSE',        hint:'Stage 10 — hidden in plain sight'},
+];
+
+// Build input grid
+const grid=document.getElementById('wordsGrid');
+CWS.forEach(cw=>{
+  const slot=document.createElement('div');slot.className='word-slot';
+  slot.innerHTML=`<label>CODEWORD #${cw.n} — ${cw.hint}</label>
+    <input type="text" id="cw${cw.n}" maxlength="${Math.max(cw.w.length+3,6)}" placeholder="${'·'.repeat(cw.w.length)}" autocomplete="off">
+    <span class="tick">✓</span>`;
+  grid.appendChild(slot);
+});
+
+function tryUnlock(){
+  let correct=0;
+  const fb=document.getElementById('gateFb');
+  CWS.forEach(cw=>{
+    const inp=document.getElementById(`cw${cw.n}`);
+    const val=inp.value.trim().toUpperCase();
+    inp.classList.remove('ok','err');
+    if(val===cw.w){inp.classList.add('ok');correct++;}
+    else if(val){inp.classList.add('err');}
+  });
+
+  if(correct===10){
+    victory();
+  } else if(correct>=7){
+    fb.textContent=`${correct}/10 correct. So close! Check the red fields — look at each stage's clue card again.`;
+  } else if(correct>=4){
+    fb.textContent=`${correct}/10 correct. Good progress. Some codewords need revisiting. Check the stage hints above.`;
+  } else {
+    fb.textContent=`${correct}/10 correct. Return to the stages where you're stuck and re-read the clue cards.`;
+  }
+}
+
+function victory(){
+  document.getElementById('gateSection').style.display='none';
+  const v=document.getElementById('victory');
+  v.classList.add('show');
+  v.scrollIntoView({behavior:'smooth'});
+  launchConfetti();
+  // Update dots — all done
+  document.querySelectorAll('.dot').forEach(d=>{d.className='dot done';});
+}
+
+function launchConfetti(){
+  const colors=['#c9a84c','#c4837a','#7a9e7e','#faf6f0','#8b1a1a','#1a1a2e','#4cc9f0'];
+  for(let i=0;i<100;i++){
+    const p=document.createElement('div');p.className='confetti-piece';
+    const sz=6+Math.random()*10;
+    p.style.cssText=`width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;--d:${1.5+Math.random()*2.5}s;--dl:${Math.random()*1.5}s;--dx:${(Math.random()-.5)*400}px;--r:${Math.random()*720}deg;border-radius:${Math.random()>.5?'50%':'2px'};`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),5000);
+  }
+}
+
+// Enter key moves to next input
+document.querySelectorAll('.word-slot input').forEach((inp,i,all)=>{
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&all[i+1])all[i+1].focus();if(e.key==='Enter'&&i===all.length-1)tryUnlock();});
+  inp.addEventListener('input',function(){this.value=this.value.replace(/[^a-zA-Z]/g,'');});
+});
+</script>
+</body>
+</html>

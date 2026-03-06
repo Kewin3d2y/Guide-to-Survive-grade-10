@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 2 — The Library Archives</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#080810;}
+body::after{content:'';position:fixed;top:0;left:0;right:0;height:50vh;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.06),transparent 65%);pointer-events:none;z-index:0;}
+.shelf{width:100%;height:6px;background:linear-gradient(90deg,#8b1a1a 0 8%,#c9a84c 8% 10%,#1a1a2e 10% 18%,#7a9e7e 18% 20%,#c4837a 20% 28%,#c9a84c 28% 30%,#8b1a1a 30% 38%,#1a1a2e 38% 46%,#7a9e7e 46% 48%,#c9a84c 48% 56%,#c4837a 56% 64%,#1a1a2e 64% 72%,#8b1a1a 72% 80%,#c9a84c 80% 82%,#7a9e7e 82% 90%,#1a1a2e 90% 100%);position:sticky;top:0;z-index:10;}
+.book-page{background:#fdf5e4;color:#2c2218;padding:38px 44px;position:relative;margin:28px 0;box-shadow:inset 4px 0 12px rgba(0,0,0,.08),4px 4px 28px rgba(0,0,0,.5);font-family:'EB Garamond',serif;font-size:14px;line-height:2;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(0,0,0,.05) 31px,rgba(0,0,0,.05) 32px);}
+.book-page::before{content:'';position:absolute;left:40px;top:0;bottom:0;width:1px;background:rgba(196,131,122,.35);}
+.book-page blockquote{border-left:3px solid var(--red);padding-left:18px;margin:18px 0;font-style:italic;color:#5c4030;font-size:15px;}
+.ph{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--red);margin-bottom:18px;display:flex;justify-content:space-between;}
+.enc{font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;letter-spacing:7px;color:var(--gold);text-align:center;padding:18px;background:rgba(201,168,76,.05);border:1px dashed rgba(201,168,76,.2);margin:18px 0;line-height:2;word-break:break-all;}
+.key-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;}
+.key-p{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.1);padding:14px;}
+.key-p .kt{font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:var(--gold);margin-bottom:8px;display:block;}
+.key-p .al{font-family:'Courier Prime',monospace;font-size:10px;color:rgba(250,246,240,.65);letter-spacing:2.5px;line-height:2;word-break:break-all;}
+.key-p .al span{color:var(--rose);}
+/* matching */
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;}
+.pair-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:12px 14px;cursor:pointer;transition:all .22s;font-size:13px;color:rgba(250,246,240,.8);user-select:none;}
+.pair-item:hover{border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.06);}
+.pair-item.sel{border-color:var(--gold);background:rgba(201,168,76,.12);color:var(--gold);}
+.pair-item.matched{border-color:var(--sage);background:rgba(122,158,126,.15);color:var(--sage);pointer-events:none;}
+.pair-item.err{animation:ef .45s ease;}
+@keyframes ef{0%,100%{background:rgba(255,255,255,.04)}50%{background:rgba(139,26,26,.28);border-color:var(--red)}}
+.match-btn{background:rgba(201,168,76,.12);border:1px solid var(--gold);color:var(--gold);font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:3px;padding:10px 22px;cursor:pointer;transition:all .22s;text-transform:uppercase;margin-top:10px;}
+.match-btn:hover{background:var(--gold);color:var(--navy);}
+.match-btn:disabled{opacity:.3;cursor:not-allowed;}
+.mfb{font-family:'Courier Prime',monospace;font-size:10px;color:var(--rose);margin-top:8px;min-height:18px;letter-spacing:1px;}
+.mt{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:3px;color:var(--gray);margin-bottom:14px;}
+</style>
+</head>
+<body>
+<div class="shelf"></div>
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="stage-bar">
+    <div class="stage-num">02</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 2 OF 10</span>
+      <div class="stage-title">The <em>Library</em> Archives</div>
+    </div>
+  </div>
+
+  <p class="scene-intro">The first clue led you here — to the room where stories live between covers, where secrets hide in plain sight between the pages of textbooks. The archivist left you two tests.</p>
+
+  <div class="book-page">
+    <div class="ph"><span>PRIVATE ARCHIVE — RESTRICTED</span><span>PAGE 47</span></div>
+    <p>Found between the pages of <em>Great Expectations</em>, shelf 3, row C. Written in red ink by someone who had been awake too long.</p>
+    <blockquote>"The ones who survive Grade 10 aren't the ones who know everything. They're the ones who know how to find what they don't yet know."</blockquote>
+    <p>Below the quote: a series of encoded letters. Cipher key left in the ICSE Chemistry textbook. Alphabetical shift: <strong>3 forward.</strong> A→D, B→E … Z→C.</p>
+    <br><p><em>The archivist knows if you cheated. The books always do.</em></p>
+  </div>
+
+  <hr class="div">
+
+  <!-- CIPHER -->
+  <div class="puzzle-box" data-label="PUZZLE I — THE CAESAR CIPHER">
+    <div class="puzzle-title">Decode the Message</div>
+    <p class="puzzle-desc">Each letter is shifted 3 positions forward. Shift them back to reveal the hidden word. A→D means D decodes to A.</p>
+    <div class="enc">VHDL · WKHA · GDB<br>UHDG · WKH · JXLGH</div>
+    <div class="key-grid">
+      <div class="key-p"><span class="kt">CIPHER (encoded)</span><div class="al">D E F G H I J K L M N O P Q R S T U V W X Y Z <span>A B C</span></div></div>
+      <div class="key-p"><span class="kt">PLAIN (decoded)</span><div class="al">A B C D E F G H I J K L M N O P Q R S T U V W <span>X Y Z</span></div></div>
+    </div>
+    <p style="font-family:'Courier Prime',monospace;font-size:10px;color:var(--gray);margin-bottom:14px;">Decode "JXLGH" — what word does it spell? Enter it below.</p>
+    <div class="answer-wrap">
+      <input class="ans-input" id="ci" placeholder="TYPE THE DECODED WORD…" maxlength="12">
+      <button class="check-btn" onclick="checkC()">DECODE</button>
+    </div>
+    <div class="feedback" id="cfb"></div>
+  </div>
+
+  <!-- MATCHING -->
+  <div class="puzzle-box" data-label="PUZZLE II — CONNECT THE EVIDENCE">
+    <p class="mt" id="mt">PAIRS MATCHED: 0 / 4</p>
+    <div class="puzzle-title">Match Cause to Effect</div>
+    <p class="puzzle-desc">Select one item from the left column and one from the right, then press MATCH. Find all 4 correct pairs.</p>
+    <div class="pair-grid" id="pg"></div>
+    <button class="match-btn" id="mb" onclick="doMatch()" disabled>MATCH SELECTED PAIR</button>
+    <div class="mfb" id="mfb"></div>
+  </div>
+
+  <div class="unlock-section" id="unlock">
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 2 COMPLETE — SECOND CODEWORD OBTAINED ✦</div>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
+      The archive is satisfied. You read between the lines — exactly as a good student should.
+    </p>
+    <div class="clue-card">
+      <span class="clue-lbl">🔑 CODEWORD #2 — ADD TO YOUR COLLECTION</span>
+      This word comes from the phrase spoken by every Chemistry student who has stared at the Periodic Table and felt their soul leave their body.<br><br>
+      <div class="clue-code">ELEMENT</div>
+    </div>
+    <a href="stage3.html" class="next-btn">→ The Chemistry Lab</a>
+    <p class="next-note">NEXT STAGE: THE CHEMISTRY LAB</p>
+  </div>
+</div>
+<script>
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i===0?'done':i===1?'active':'');d.appendChild(e);}
+
+function checkC(){
+  const v=document.getElementById('ci').value.trim().toUpperCase();
+  const fb=document.getElementById('cfb');
+  if(['GUIDE','JXLGH'].includes(v)||v==='GUIDE'){
+    fb.className='feedback good';fb.textContent='✓  Correct! "SEIZE THE DAY — READ THE GUIDE." The archive stirs. Now complete the matching puzzle.';
+    document.getElementById('ci').style.borderColor='var(--sage)';
+  } else {
+    fb.className='feedback';fb.textContent='✗  Not quite. Shift each letter BACK by 3. J→G, X→U, L→I, G→D, H→E → GUIDE.';
+  }
+}
+document.getElementById('ci').addEventListener('keydown',e=>{if(e.key==='Enter')checkC();});
+
+const pairs=[
+  {l:"Studying 8 hours distracted",r:"Less effective than 2 focused hours"},
+  {l:"ICSE Biology diagrams",r:"Must be drawn and labelled for full marks"},
+  {l:"The night before your exam",r:"Sleep 8 hours — your best revision tool"},
+  {l:"Comparison with classmates",r:"You only see their highlight reel — not their panic"},
+];
+let sel={l:null,r:null},matched=0;
+
+function buildPairs(){
+  const pg=document.getElementById('pg');
+  const left=pairs.map((p,i)=>({t:p.l,side:'l',idx:i}));
+  const right=[...pairs.map((p,i)=>({t:p.r,side:'r',idx:i}))].sort(()=>Math.random()-.5);
+  const all=[];for(let i=0;i<4;i++){all.push(left[i]);all.push(right[i]);}
+  pg.innerHTML='';
+  all.forEach(item=>{
+    const el=document.createElement('div');
+    el.className='pair-item'; el.textContent=item.t;
+    el.dataset.side=item.side; el.dataset.idx=item.idx;
+    el.onclick=()=>pick(el,item.side);
+    pg.appendChild(el);
+  });
+}
+function pick(el,side){
+  if(el.classList.contains('matched'))return;
+  document.querySelectorAll(`.pair-item[data-side="${side}"].sel`).forEach(e=>e.classList.remove('sel'));
+  el.classList.toggle('sel');
+  sel[side]=el.classList.contains('sel')?el:null;
+  document.getElementById('mb').disabled=!(sel.l&&sel.r);
+}
+function doMatch(){
+  if(!sel.l||!sel.r)return;
+  const ok=sel.l.dataset.idx===sel.r.dataset.idx;
+  const mfb=document.getElementById('mfb');
+  if(ok){
+    sel.l.classList.remove('sel');sel.r.classList.remove('sel');
+    sel.l.classList.add('matched');sel.r.classList.add('matched');
+    matched++;
+    document.getElementById('mt').textContent=`PAIRS MATCHED: ${matched} / 4`;
+    mfb.style.color='var(--sage)';mfb.textContent='✓  Correct connection. The evidence speaks.';
+    if(matched===4)setTimeout(()=>document.getElementById('unlock').classList.add('show'),500);
+  } else {
+    [sel.l,sel.r].forEach(e=>{e.classList.add('err');setTimeout(()=>e.classList.remove('err','sel'),450);});
+    mfb.style.color='var(--rose)';mfb.textContent='✗  These don\'t match. Look closer.';
+  }
+  sel={l:null,r:null};
+  document.getElementById('mb').disabled=true;
+}
+buildPairs();
+</script>
+</body>
+</html>

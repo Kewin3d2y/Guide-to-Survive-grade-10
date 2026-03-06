@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage 4 — The Art Room</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body{background:#0a0608;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 60%,rgba(196,131,122,.07),transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(122,158,126,.05),transparent 55%);pointer-events:none;z-index:0;}
+.palette{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:24px 0;}
+.swatch{width:56px;height:56px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .3s;position:relative;box-shadow:0 4px 12px rgba(0,0,0,.4);}
+.swatch:hover{transform:scale(1.15);box-shadow:0 6px 20px rgba(0,0,0,.5);}
+.swatch.selected{border-color:white;transform:scale(1.12);}
+.swatch .label{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:1px;color:rgba(250,246,240,.4);white-space:nowrap;}
+.canvas-area{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:20px 0;padding:20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);}
+.cell{aspect-ratio:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.05);cursor:pointer;transition:all .25s;border-radius:3px;}
+.cell:hover{border-color:rgba(255,255,255,.2);}
+/* The Pattern puzzle */
+.pattern-row{display:flex;align-items:center;gap:12px;margin:12px 0;}
+.pat-circle{width:40px;height:40px;border-radius:50%;flex-shrink:0;}
+.pat-q{width:40px;height:40px;border-radius:50%;border:2px dashed rgba(201,168,76,.4);background:rgba(255,255,255,.04);flex-shrink:0;cursor:pointer;transition:all .3s;position:relative;display:flex;align-items:center;justify-content:center;font-family:'Courier Prime',monospace;font-size:9px;color:rgba(201,168,76,.4);}
+.pat-q:hover{border-color:var(--gold);}
+.pat-q.filled{border-style:solid;border-color:transparent;}
+.color-choices{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;}
+.cc{width:36px;height:36px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .25s;box-shadow:0 3px 8px rgba(0,0,0,.3);}
+.cc:hover{transform:scale(1.15);}
+.cc.picked{border-color:white;transform:scale(1.1);}
+.seq-feedback{font-family:'Courier Prime',monospace;font-size:11px;color:var(--rose);margin-top:12px;min-height:20px;letter-spacing:1px;}
+.check-seq{background:rgba(201,168,76,.12);border:1px solid var(--gold);color:var(--gold);font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:3px;padding:10px 22px;cursor:pointer;transition:all .22s;text-transform:uppercase;margin-top:12px;}
+.check-seq:hover{background:var(--gold);color:var(--navy);}
+</style>
+</head>
+<body>
+<div class="stage-wrap">
+  <div class="progress-dots" id="dots"></div>
+
+  <div class="stage-bar">
+    <div class="stage-num">04</div>
+    <div class="stage-meta">
+      <span class="stage-label">THE CASE OF THE MISSING GRADES · STAGE 4 OF 10</span>
+      <div class="stage-title">The <em>Art Room</em></div>
+    </div>
+  </div>
+
+  <p class="scene-intro">The Art Room — where colour is language, and patterns carry meaning. The next clue was hidden in the colour sequences painted on the back wall. You need to identify the pattern and complete the sequence.</p>
+
+  <div class="pinned-note">
+    <strong>NOTE — Found behind the colour wheel on the supply shelf:</strong>
+    <br><br>
+    Three colour sequences were painted on this wall. Two are decoys. One contains a rule — a logical pattern. Find it, complete the missing colour, and the codeword hidden in that colour's name is yours.
+    <br><br>
+    Art is not random. Even chaos has a grammar.
+    <span class="sig">— The Archivist</span>
+  </div>
+
+  <hr class="div">
+
+  <div class="puzzle-box" data-label="PUZZLE — THE COLOUR PATTERN">
+    <div class="puzzle-title">Find the Pattern — Complete the Sequence</div>
+    <p class="puzzle-desc">Three sequences below. Only ONE follows a strict logical rule. Identify the rule, find the missing colour, and type its name.</p>
+
+    <!-- Sequence A — DECOY (random) -->
+    <div style="margin:18px 0;">
+      <p style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:3px;color:var(--gray);margin-bottom:10px;">SEQUENCE A:</p>
+      <div class="pattern-row">
+        <div class="pat-circle" style="background:#e63946;"></div>
+        <div class="pat-circle" style="background:#c9a84c;"></div>
+        <div class="pat-circle" style="background:#1a1a2e;"></div>
+        <div class="pat-circle" style="background:#e63946;"></div>
+        <div class="pat-circle" style="background:#c4837a;"></div>
+        <div class="pat-q">?</div>
+      </div>
+      <p style="font-family:'Courier Prime',monospace;font-size:9px;color:rgba(250,246,240,.3);margin-top:6px;">Red · Gold · Navy · Red · Rose · ?</p>
+    </div>
+
+    <!-- Sequence B — THE CORRECT ONE: spectrum order (ROY G BIV) Red→Orange→Yellow→Green→Blue→Indigo→Violet) -->
+    <div style="margin:18px 0;padding:14px;border:1px solid rgba(201,168,76,.15);background:rgba(201,168,76,.03);">
+      <p style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;">SEQUENCE B — Study this one carefully:</p>
+      <div class="pattern-row">
+        <div class="pat-circle" style="background:#e63946;" title="Red"></div>
+        <div class="pat-circle" style="background:#f4a261;" title="Orange"></div>
+        <div class="pat-circle" style="background:#e9c46a;" title="Yellow"></div>
+        <div class="pat-circle" style="background:#2a9d8f;" title="Green"></div>
+        <div class="pat-circle" style="background:#4361ee;" title="Blue"></div>
+        <div class="pat-q" id="missingQ" title="?">?</div>
+      </div>
+      <p style="font-family:'Courier Prime',monospace;font-size:9px;color:rgba(250,246,240,.4);margin-top:6px;">Red → Orange → Yellow → Green → Blue → ?</p>
+      <p style="font-family:'Courier Prime',monospace;font-size:9px;color:rgba(201,168,76,.5);margin-top:4px;">RULE: These follow the visible light spectrum (ROYGBIV). What comes next after Blue?</p>
+    </div>
+
+    <!-- Sequence C — DECOY -->
+    <div style="margin:18px 0;">
+      <p style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:3px;color:var(--gray);margin-bottom:10px;">SEQUENCE C:</p>
+      <div class="pattern-row">
+        <div class="pat-circle" style="background:#ffffff20;border:1px solid #fff3;"></div>
+        <div class="pat-circle" style="background:#ffffff40;border:1px solid #fff4;"></div>
+        <div class="pat-circle" style="background:#ffffff60;border:1px solid #fff5;"></div>
+        <div class="pat-circle" style="background:#ffffff80;border:1px solid #fff7;"></div>
+        <div class="pat-circle" style="background:#ffffffa0;border:1px solid #fff9;"></div>
+        <div class="pat-q">?</div>
+      </div>
+      <p style="font-family:'Courier Prime',monospace;font-size:9px;color:rgba(250,246,240,.3);margin-top:6px;">Getting lighter… lighter… lighter…</p>
+    </div>
+
+    <hr class="div">
+
+    <p style="font-family:'Courier Prime',monospace;font-size:10px;color:rgba(250,246,240,.5);margin-bottom:14px;">In Sequence B, what colour comes after Blue in the visible light spectrum (ROYGBIV)?</p>
+    
+    <div class="color-choices" id="choices">
+      <div class="cc" style="background:#4cc9f0;" title="Cyan" onclick="pick(this,'CYAN')"></div>
+      <div class="cc" style="background:#7b2d8b;" title="Indigo" onclick="pick(this,'INDIGO')"></div>
+      <div class="cc" style="background:#ee82ee;" title="Violet" onclick="pick(this,'VIOLET')"></div>
+      <div class="cc" style="background:#1d3461;" title="Navy Blue" onclick="pick(this,'NAVY')"></div>
+    </div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'Courier Prime',monospace;font-size:9px;color:rgba(250,246,240,.4);margin-bottom:16px;">
+      <span style="color:#4cc9f0;">■ Cyan</span>
+      <span style="color:#7b2d8b;">■ Indigo</span>
+      <span style="color:#ee82ee;">■ Violet</span>
+      <span style="color:#1d3461;">■ Navy Blue</span>
+    </div>
+
+    <div class="answer-wrap">
+      <input class="ans-input" id="ai" placeholder="TYPE THE COLOUR NAME…" maxlength="12">
+      <button class="check-btn" onclick="chk()">CONFIRM</button>
+    </div>
+    <div class="feedback" id="fb"></div>
+  </div>
+
+  <div class="unlock-section" id="unlock">
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 4 COMPLETE — FOURTH CODEWORD OBTAINED ✦</div>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
+      The spectrum reveals its secret. You see patterns where others see noise — that is a detective's gift.
+    </p>
+    <div class="clue-card">
+      <span class="clue-lbl">🔑 CODEWORD #4 — WRITE THIS DOWN</span>
+      The fourth word is what this room teaches — that the world is full of pattern and beauty, even when exams make you forget.<br><br>
+      <div class="clue-code">SPECTRUM</div>
+    </div>
+    <a href="stage5.html" class="next-btn">→ The Music Room</a>
+    <p class="next-note">NEXT STAGE: THE MUSIC ROOM</p>
+  </div>
+</div>
+
+<script>
+const d=document.getElementById('dots');
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<3?'done':i===3?'active':'');d.appendChild(e);}
+
+let picked='';
+function pick(el,col){
+  document.querySelectorAll('.cc').forEach(c=>c.classList.remove('picked'));
+  el.classList.add('picked');
+  picked=col;
+  document.getElementById('ai').value=col;
+  if(col==='INDIGO'){
+    document.getElementById('missingQ').style.background='#7b2d8b';
+    document.getElementById('missingQ').style.borderStyle='solid';
+    document.getElementById('missingQ').textContent='';
+  } else {
+    document.getElementById('missingQ').style.background='rgba(255,255,255,.04)';
+    document.getElementById('missingQ').textContent='?';
+  }
+}
+function chk(){
+  const v=document.getElementById('ai').value.trim().toUpperCase();
+  const fb=document.getElementById('fb');
+  if(v==='INDIGO'||v==='I'){
+    fb.className='feedback good';
+    fb.textContent='✓  Correct! ROYGBIV: Red, Orange, Yellow, Green, Blue, INDIGO, Violet. The spectrum is complete.';
+    document.getElementById('missingQ').style.background='#7b2d8b';
+    document.getElementById('missingQ').textContent='';
+    setTimeout(()=>document.getElementById('unlock').classList.add('show'),900);
+  } else {
+    fb.className='feedback';
+    fb.textContent='✗  Remember ROYGBIV: Red, Orange, Yellow, Green, Blue… what comes next? It starts with "I".';
+  }
+}
+document.getElementById('ai').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
+</script>
+</body>
+</html>
