@@ -6,36 +6,28 @@
 <link rel="stylesheet" href="theme.css">
 <style>
 body{background:#06080c;}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.05),transparent 60%);pointer-events:none;z-index:0;}
-/* Blackboard style */
-.blackboard{background:#1a2e1a;border:12px solid #4a3520;padding:32px;margin:24px 0;position:relative;box-shadow:inset 0 0 40px rgba(0,0,0,.5),4px 4px 20px rgba(0,0,0,.6);}
-.blackboard::before{content:'GRADE 10 ICSE — EVIDENCE BOARD';position:absolute;top:-6px;left:50%;transform:translateX(-50%);background:#4a3520;font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:#c9a84c;padding:2px 16px;}
-.chalk-text{font-family:'Courier Prime',monospace;color:rgba(255,255,255,.85);line-height:1.9;font-size:13px;}
-/* Crossword grid */
-.crossword{display:inline-grid;gap:2px;margin:20px auto;display:block;width:fit-content;}
-.crow{display:flex;gap:2px;}
-.cell{width:38px;height:38px;display:flex;align-items:center;justify-content:center;position:relative;font-family:'Courier Prime',monospace;}
-.cell.black{background:#111;pointer-events:none;}
-.cell.white{background:rgba(253,249,242,.95);border:1px solid rgba(0,0,0,.15);}
-.cell input{width:100%;height:100%;border:none;background:transparent;text-align:center;font-family:'Courier Prime',monospace;font-size:16px;font-weight:700;color:#1a1510;text-transform:uppercase;outline:none;cursor:pointer;}
-.cell input:focus{background:rgba(201,168,76,.2);}
-.cell .cn{position:absolute;top:2px;left:3px;font-size:7px;font-family:'Courier Prime',monospace;color:rgba(0,0,0,.4);font-weight:700;line-height:1;pointer-events:none;}
-.cell.correct-cell input{color:var(--sage);}
-.cell.wrong-cell input{color:var(--red);}
+.blackboard{background:#1a2e1a;border:12px solid #4a3520;padding:28px 24px;margin:24px 0;position:relative;box-shadow:inset 0 0 40px rgba(0,0,0,.5);overflow-x:auto;}
+.blackboard::before{content:'EVIDENCE BOARD';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#4a3520;font-family:'Courier Prime',monospace;font-size:8px;letter-spacing:3px;color:#c9a84c;padding:2px 16px;white-space:nowrap;}
+.crow{display:flex;gap:3px;margin-bottom:3px;}
+.cell{width:42px;height:42px;flex-shrink:0;position:relative;}
+.cell.black{background:transparent;}
+.cell.white{background:rgba(245,240,225,.95);border:1px solid rgba(0,0,0,.2);}
+.cell input{position:absolute;inset:0;border:none;background:transparent;text-align:center;font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;color:#1a1510;text-transform:uppercase;outline:none;width:100%;height:100%;padding:0;}
+.cell input:focus{background:rgba(201,168,76,.3);}
+.cell .cn{position:absolute;top:2px;left:3px;font-size:7px;font-family:'Courier Prime',monospace;color:rgba(0,0,0,.55);font-weight:700;line-height:1;pointer-events:none;z-index:2;}
+.cell input.ok{color:#2a7a2a;}
+.cell input.err{color:#8b1a1a;background:rgba(139,26,26,.12);}
 .clues-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0;}
-.clue-section h4{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:12px;}
-.clue-item{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;}
-.clue-num{font-family:'Courier Prime',monospace;font-size:10px;color:var(--rose);flex-shrink:0;min-width:20px;font-weight:700;}
-.clue-text{font-size:12.5px;color:rgba(250,246,240,.7);line-height:1.5;}
-.check-cw{background:var(--navy);border:1px solid var(--gold);color:var(--gold);font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:3px;padding:11px 24px;cursor:pointer;transition:all .25s;text-transform:uppercase;margin-top:14px;}
-.check-cw:hover{background:var(--gold);color:var(--navy);}
-.hint-reveal{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:2px;color:var(--gray);margin-top:10px;cursor:pointer;text-decoration:underline;}
+.clue-section h4{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:#c9a84c;margin-bottom:12px;}
+.clue-item{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;}
+.clue-num{font-family:'Courier Prime',monospace;font-size:10px;color:#c4837a;flex-shrink:0;min-width:28px;font-weight:700;}
+.clue-text{font-size:13px;color:rgba(250,246,240,.75);line-height:1.5;}
+.hint-link{font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:2px;color:#6b6560;margin-top:12px;cursor:pointer;text-decoration:underline;display:inline-block;}
 </style>
 </head>
 <body>
 <div class="stage-wrap">
   <div class="progress-dots" id="dots"></div>
-
   <div class="stage-bar">
     <div class="stage-num">07</div>
     <div class="stage-meta">
@@ -43,242 +35,137 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="stage-title">The Old <em>Classroom</em></div>
     </div>
   </div>
-
-  <p class="scene-intro">The oldest classroom in the school — Room 7. The desks are carved with years of initials and equations. On the blackboard, someone left a crossword. The clues are all about Grade 10 ICSE. Fill it in correctly to extract the hidden word.</p>
-
+  <p class="scene-intro">The oldest classroom in the school. On the blackboard, someone left a crossword. Solve it to unlock the seventh codeword.</p>
   <div class="blackboard">
-    <div class="chalk-text" style="margin-bottom:20px;opacity:.7;font-size:11px;letter-spacing:2px;">FILL IN THE CROSSWORD — ALL ANSWERS ARE ICSE GRADE 10 RELATED</div>
-    <div class="crossword" id="grid"></div>
+    <div id="grid"></div>
   </div>
-
   <div class="puzzle-box" data-label="CROSSWORD CLUES">
     <div class="clues-grid">
       <div class="clue-section">
         <h4>ACROSS →</h4>
-        <div class="clue-item"><span class="clue-num">1A</span><span class="clue-text">The Latin phrase meaning "seize the day" — two words (5 letters, first word)</span></div>
-        <div class="clue-item"><span class="clue-num">3A</span><span class="clue-text">In Physics, F = ma. "m" stands for this (4 letters)</span></div>
-        <div class="clue-item"><span class="clue-num">5A</span><span class="clue-text">This ICSE subject involves ecosystems, cells, and diagrams that must be labelled (7 letters)</span></div>
-        <div class="clue-item"><span class="clue-num">6A</span><span class="clue-text">The process by which plants make food using sunlight (13 letters)</span></div>
+        <div class="clue-item"><span class="clue-num">1A</span><span class="clue-text">Do this for 8 hours the night before every exam (5)</span></div>
+        <div class="clue-item"><span class="clue-num">2A</span><span class="clue-text">A snake or a person who enables bad habits (5)</span></div>
+        <div class="clue-item"><span class="clue-num">3A</span><span class="clue-text">Go and get something; also what you do with a concept when it finally clicks (5)</span></div>
+        <div class="clue-item"><span class="clue-num">4A</span><span class="clue-text">"___ Diem" — the first word of the Latin phrase meaning seize the day (5)</span></div>
       </div>
       <div class="clue-section">
         <h4>DOWN ↓</h4>
-        <div class="clue-item"><span class="clue-num">1D</span><span class="clue-text">What you should do with 8 hours of it the night before an exam (5 letters)</span></div>
-        <div class="clue-item"><span class="clue-num">2D</span><span class="clue-text">The branch of Chemistry dealing with carbon compounds (7 letters)</span></div>
-        <div class="clue-item"><span class="clue-num">4D</span><span class="clue-text">In Maths, this is the steepness of a line (5 letters)</span></div>
+        <div class="clue-item"><span class="clue-num">1D</span><span class="clue-text">An older, wiser person — like the one who wrote this guide (5)</span></div>
+        <div class="clue-item"><span class="clue-num">2D</span><span class="clue-text">A part or portion — every chapter of this hunt is one ___ of the puzzle (5)</span></div>
       </div>
     </div>
-
-    <button class="check-cw" id="checkCWBtn">CHECK CROSSWORD</button>
+    <button class="check-btn" id="checkBtn">CHECK CROSSWORD</button>
     <div class="feedback" id="fb"></div>
-    <div class="hint-reveal" id="showHintsBtn">▸ REVEAL ANSWER HINTS (click if stuck)</div>
-    <div id="hints" style="display:none;font-family:'Courier Prime',monospace;font-size:10px;color:var(--gray);margin-top:12px;line-height:2;">
-      1A: CARPE &nbsp;|&nbsp; 3A: MASS &nbsp;|&nbsp; 5A: BIOLOGY &nbsp;|&nbsp; 6A: PHOTOSYNTHESIS<br>
-      1D: SLEEP &nbsp;|&nbsp; 2D: ORGANIC &nbsp;|&nbsp; 4D: SLOPE
+    <span class="hint-link" id="hintBtn">▸ STUCK? Click to reveal answers</span>
+    <div id="hints" style="display:none;font-family:'Courier Prime',monospace;font-size:10px;color:#6b6560;margin-top:10px;line-height:2.2;">
+      1A: SLEEP &nbsp;|&nbsp; 2A: ADDER &nbsp;|&nbsp; 3A: FETCH &nbsp;|&nbsp; 4A: CARPE<br>
+      1D: ELDER &nbsp;|&nbsp; 2D: PIECE
     </div>
   </div>
-
   <div class="unlock-section" id="unlock">
-    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;">✦ STAGE 7 COMPLETE — SEVENTH CODEWORD OBTAINED ✦</div>
-    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:16px;color:var(--cream);margin-bottom:20px;line-height:1.8;">
-      The old classroom gives up its crossword. Words within words within words — like the knowledge you're building.
-    </p>
+    <div style="font-family:'Courier Prime',monospace;font-size:9px;letter-spacing:4px;color:#c9a84c;margin-bottom:16px;">✦ STAGE 7 COMPLETE — SEVENTH CODEWORD OBTAINED ✦</div>
     <div class="clue-card">
       <span class="clue-lbl">🔑 CODEWORD #7 — ALMOST THERE</span>
-      The seventh word is what a student does with knowledge — they don't just collect it, they build it into something.<br><br>
+      The seventh word is what a student does with knowledge — builds it all into something whole.<br><br>
       <div class="clue-code">SYNTHESIS</div>
     </div>
     <a href="stage8.html" class="next-btn">→ The Infirmary</a>
-    <p class="next-note">NEXT STAGE: THE INFIRMARY — MORSE CODE</p>
+    <p class="next-note">NEXT STAGE: THE INFIRMARY</p>
   </div>
 </div>
-
 <script>
-const d=document.getElementById('dots');
-for(let i=0;i<10;i++){const e=document.createElement('div');e.className='dot'+(i<6?'done':i===6?'active':'');d.appendChild(e);}
-
-// Grid layout — 7 columns x 7 rows
-// Answers: CARPE(1A,r0,c0-4), MASS(3A,r2,c2-5), BIOLOGY(5A,r4,c0-6), PHOTOSYNTHESIS too long — simplify
-// Let's use a simpler 5x7 crossword
-// 1A: CARPE (row0, col0-4)
-// 1D: SLEEP (col0, row0-4)
-// 2D: ORGANIC (col4, row0-6)
-// 3A: MASS (row2, col1-4)
-// 4D: SLOPE (col3, row2-6)
-// 5A: BIOLOGY (row4, col0-6) — too wide, use ROW4 ORGAN (5 letters ORGAN is part of ORGANIC)
-// Simplify: 5A = ORGAN (row4,col0-4), 6A = PHOTO (row6 — skip, do 4 answers)
-// Final simple grid: 5 cols x 7 rows
-// 1A CARPE: r0 c0-c4
-// 1D SLEEP: c0 r0-r4
-// 2D ORGANIC: c4 r0-r6  (7 rows needed)
-// 3A MASS: r2 c1-c4
-// 4D SLOPE: c3 r2-r6
-// 5A ORGAN: r4 c0-c4
-// 6A row6: need c1 and c3 — OPE? Let's do 6A = LORE: c1,r6-? No.
-// Keep it to 5 clues: 1A,1D,2D,3A,4D,5A
-// Grid is 7 rows x 5 cols
-const R=7,C=5;
-const answers={
-  '0,0':'C','0,1':'A','0,2':'R','0,3':'P','0,4':'E', // 1A CARPE
-  '1,0':'L',                                          // 1D: SLEEP c0,r0-4: r1=L
-  '2,0':'E','2,1':'M','2,2':'A','2,3':'S','2,4':'S', // 3A MASS at r2,c1-4 + 1D at r2c0=E
-  '3,0':'P',                                          // 1D r3=P
-  '4,0':'S','4,1':'O','4,2':'R','4,3':'G','4,4':'A', // 5A SORGN? No.
-};
-// Let me just hardcode a clean 5x5 grid manually:
-// Row0: C  A  R  P  E     (1A = CARPE)
-// Row1: L  .  .  .  R     (1D going down: C-L-E-E-P / 2D going down: E-R-G-A-N-I-C wait 7 rows)
-// Let me do a small 6x6:
-// 1A CARPE:  row0, col0-4
-// 1D SLEEP:  col0, row0-4 (S at r0, L r1, E r2, E r3, P r4)
-// 3A MESS→MASS: row2, col0-3 (E at c0 from 1D, M A S S c0=E conflict) → use row2 col1-4: _MAS -- conflict
-// Redesign with clean grid:
-
-// FINAL CLEAN DESIGN:
-// Positions: [row][col] = letter or null (black)
-// 1A: CARPE row=0, col=0..4
-// 1D: SLEEP col=0, row=0..4 (C,L,E,E,P)  — C at (0,0) conflicts ok (same letter C in both)
-// 2D: RANGE col=4, row=0..4 (E,A,N,G,E) — (0,4)=E ok
-// 3A: LEAN  row=2, col=0..3 (E,L,E,A) — (2,0)=E ok from 1D
-// 4D: SLOPE col=2, row=2..6 (S→wait (2,2)=R from CARPE? No CARPE is row0)
-// Let me just hardcode a working 5x6 crossword:
-// ANSWERS:
-//  (0,0)C (0,1)A (0,2)R (0,3)P (0,4)E   ← 1A: CARPE
-//  (1,0)L         (1,4)A                  ← 1D col0 / 2D col4
-//  (2,0)E (2,1)M (2,2)A (2,3)S (2,4)S   ← 3A: EMASS? no: use EXAMS at row2 if (2,0)=E
-//  Conflict: 1D at col0 = C,L,E,E,P. So (2,0)=E ok!
-//  3A row2: (2,0)E (2,1)X (2,2)A (2,3)M (2,4)S → EXAMS, (2,4)=S but 2D col4 would be R≠S. 
-//  Let 2D start at row0 and end at row4: col4: E,A,N,G,S → EANGS? bad.
-// I'll just make a simple reveal-based crossword without strict intersection checks:
-
-const grid_answers = [
-// row: [c0, c1, c2, c3, c4]
-  ['C','A','R','P','E'],  // row0: 1A = CARPE
-  ['L', '','', '','G'],  // row1: 1D(col0), 2D(col4)
-  ['E','M','A','S','S'],  // row2: 1D(col0)=E, 3A=EMASS? let 3A = _MASS col1-4
-  ['E', '','S','','A'],  // row3: 1D(col0),4D(col2)=S,2D(col4)
-  ['P', '','L','','N'],  // row4: 1D(col0)=P, 4D=L, 2D=N
-  [null,'','O','','I'],  // row5: 4D=O, 2D=I
-  [null,'','P','','C'],  // row6: 4D=P completes SLOPE, 2D=C→ORGANIC
-];
-// 1A CARPE: row0 col0-4
-// 1D SLEEP: col0 row0-4: C,L,E,E,P ✓
-// 2D ORGANIC: col4 row0-6: E,G,S,A,N,I,C ✓ (EGSANIC - not organic..) hmm
-// Let me just do a simple version with separate non-intersecting words:
-
-const GRID_ROWS=7, GRID_COLS=7;
-// Define black cells (1=black, 0=white)
-const layout=[
-  [0,0,0,0,0,1,1],
-  [0,1,1,1,0,1,1],
-  [1,0,0,0,0,0,1],
-  [1,0,1,1,1,1,1],
-  [0,0,0,0,0,0,0],
-  [1,0,1,0,1,1,1],
-  [1,0,1,0,1,1,1],
-];
-// Answers filling white cells row by row:
-const answers2={
-  '0,0':'C','0,1':'A','0,2':'R','0,3':'P','0,4':'E', // 1A CARPE
-  '1,0':'L','1,4':'R',
-  '2,1':'M','2,2':'A','2,3':'S','2,4':'S','2,5':'I', // 3A MASSI?
-  // This is getting complicated. Let me just use a pre-solved simple grid.
-};
-
-// SIMPLEST APPROACH: just reveal cells, no strict intersection
-// Use a flat visual crossword with 4 words:
-const WORDS=[
-  {word:'CARPE',   row:0,col:0,dir:'A',num:1, clue:'Latin: "_____ Diem" — first word (5 letters)'},
-  {word:'SLEEP',   row:0,col:0,dir:'D',num:1, clue:'Do this for 8 hours the night before your exam (5 letters)'},
-  {word:'MASS',    row:2,col:1,dir:'A',num:3, clue:'In F=ma, "m" stands for this (4 letters)'},
-  {word:'BIOLOGY', row:4,col:0,dir:'A',num:5, clue:'ICSE subject: cells, diagrams, ecosystems (7 letters)'},
-  {word:'ORGANIC', row:0,col:4,dir:'D',num:2, clue:'Branch of Chemistry studying carbon compounds (7 letters)'},
-];
-
-const GR=7, GC=8;
-const cellData={}; // key "r,c" → {letter, num?, inputs}
-
-function initGrid(){
-  WORDS.forEach(w=>{
-    for(let i=0;i<w.word.length;i++){
-      const r=w.dir==='A'?w.row:w.row+i;
-      const c=w.dir==='D'?w.col:w.col+i;
-      const key=`${r},${c}`;
-      if(!cellData[key])cellData[key]={letter:w.word[i],num:null};
-      else if(cellData[key].letter!==w.word[i]){
-        // conflict — skip (use first)
-      }
-      if(i===0 && !cellData[key].num) cellData[key].num=w.num+(w.dir==='A'?'A':'D');
-    }
-  });
-  // Number cells
-  WORDS.forEach(w=>{
-    const key=`${w.row},${w.col}`;
-    if(!cellData[key].numLabel)cellData[key].numLabel=w.num;
-  });
+var dotsEl = document.getElementById('dots');
+for (var i = 0; i < 10; i++) {
+  var dot = document.createElement('div');
+  dot.className = 'dot' + (i < 6 ? ' done' : i === 6 ? ' active' : '');
+  dotsEl.appendChild(dot);
 }
 
-function renderGrid(){
-  initGrid();
-  const gridEl=document.getElementById('grid');
-  for(let r=0;r<GR;r++){
-    const row=document.createElement('div'); row.className='crow';
-    for(let c=0;c<GC;c++){
-      const key=`${r},${c}`;
-      const cellDiv=document.createElement('div'); cellDiv.className='cell';
-      if(cellData[key]){
-        cellDiv.classList.add('white');
-        cellDiv.dataset.key=key;
-        if(cellData[key].numLabel){
-          const num=document.createElement('div'); num.className='cn'; num.textContent=cellData[key].numLabel;
-          cellDiv.appendChild(num);
+// Grid: 5 rows x 6 cols
+// row0: S L E E P #
+// row1: # # L # I #
+// row2: # A D D E R
+// row3: # F E T C H
+// row4: C A R P E #
+
+var answers = {
+  '0,0':'S','0,1':'L','0,2':'E','0,3':'E','0,4':'P',
+  '1,2':'L',         '1,4':'I',
+  '2,1':'A','2,2':'D','2,3':'D','2,4':'E','2,5':'R',
+  '3,1':'F','3,2':'E','3,3':'T','3,4':'C','3,5':'H',
+  '4,0':'C','4,1':'A','4,2':'R','4,3':'P','4,4':'E'
+};
+
+var numbers = {
+  '0,0':'1',
+  '2,1':'2',
+  '3,1':'3',
+  '4,0':'4',
+  '1,4':'2'
+};
+
+var ROWS = 5, COLS = 6;
+
+function buildGrid() {
+  var gridEl = document.getElementById('grid');
+  for (var r = 0; r < ROWS; r++) {
+    var rowEl = document.createElement('div');
+    rowEl.className = 'crow';
+    for (var c = 0; c < COLS; c++) {
+      var key = r + ',' + c;
+      var cellEl = document.createElement('div');
+      cellEl.className = 'cell';
+      if (answers[key]) {
+        cellEl.classList.add('white');
+        if (numbers[key]) {
+          var numEl = document.createElement('div');
+          numEl.className = 'cn';
+          numEl.textContent = numbers[key];
+          cellEl.appendChild(numEl);
         }
-        const inp=document.createElement('input');
-        inp.maxLength=1; inp.dataset.key=key;
-        inp.addEventListener('input',function(){
-          this.value=this.value.toUpperCase().replace(/[^A-Z]/,'');
-          if(this.value) focusNext(r,c);
+        var inp = document.createElement('input');
+        inp.maxLength = 1;
+        inp.setAttribute('data-key', key);
+        inp.addEventListener('input', function() {
+          this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '');
+          this.classList.remove('ok','err');
         });
-        cellDiv.appendChild(inp);
+        cellEl.appendChild(inp);
       } else {
-        cellDiv.classList.add('black');
+        cellEl.classList.add('black');
       }
-      row.appendChild(cellDiv);
+      rowEl.appendChild(cellEl);
     }
-    gridEl.appendChild(row);
+    gridEl.appendChild(rowEl);
   }
 }
 
-function focusNext(r,c){
-  const next=document.querySelector(`input[data-key="${r},${c+1}"]`)||document.querySelector(`input[data-key="${r+1},${c}"]`);
-  if(next)next.focus();
-}
-
-function checkCW(){
-  let correct=0, total=0;
-  Object.keys(cellData).forEach(key=>{
-    const inp=document.querySelector(`input[data-key="${key}"]`);
-    if(!inp)return; total++;
-    const cell=inp.parentElement;
-    cell.classList.remove('correct-cell','wrong-cell');
-    if(inp.value===cellData[key].letter){correct++;cell.classList.add('correct-cell');}
-    else if(inp.value){cell.classList.add('wrong-cell');}
-  });
-  const fb=document.getElementById('fb');
-  if(correct===total){
-    fb.className='feedback good';
-    fb.textContent=`✓  Perfect! All ${total} letters correct. The classroom yields its secret.`;
-    setTimeout(()=>document.getElementById('unlock').classList.add('show'),900);
+document.getElementById('checkBtn').addEventListener('click', function() {
+  var inputs = document.querySelectorAll('input[data-key]');
+  var correct = 0, total = inputs.length;
+  for (var i = 0; i < inputs.length; i++) {
+    var inp = inputs[i];
+    var key = inp.getAttribute('data-key');
+    inp.classList.remove('ok','err');
+    if (inp.value === answers[key]) { inp.classList.add('ok'); correct++; }
+    else { inp.classList.add('err'); }
+  }
+  var fb = document.getElementById('fb');
+  if (correct === total) {
+    fb.className = 'feedback good';
+    fb.textContent = '✓  Perfect! All letters correct. The classroom yields its secret.';
+    setTimeout(function() { document.getElementById('unlock').classList.add('show'); }, 900);
   } else {
-    fb.className='feedback';
-    fb.textContent=`${correct}/${total} letters correct. Check the red cells. Use the hints if needed.`;
+    fb.className = 'feedback';
+    fb.textContent = correct + ' / ' + total + ' correct. Red cells need fixing.';
   }
-}
+});
 
-function showHints(){document.getElementById('hints').style.display='block';}
+document.getElementById('hintBtn').addEventListener('click', function() {
+  document.getElementById('hints').style.display = 'block';
+});
 
-renderGrid();
-document.getElementById("checkCWBtn").addEventListener("click",checkCW);
-document.getElementById("showHintsBtn").addEventListener("click",showHints);
+buildGrid();
 </script>
 </body>
 </html>
